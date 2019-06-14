@@ -107,11 +107,6 @@ void init_scoretree()
                                 {
                                     NSString *str = [[NSString alloc] initWithFormat:@"%d%d%d%d1%d%d%d%d", N1,N2,N3,N4,N5,N6,N7,N8];
                                     scoretree[i] = get_score(str);
-                                    if(scoretree[i] == 600)
-                                    {
-                                        //NSLog(@"%@",str);
-                                        //NSLog(@"scoretree[%d]: %d",i,scoretree[i]);
-                                    }
                                     NSLog(@"%@",str);
                                     NSLog(@"scoretree[%d]: %d",i,scoretree[i]);
                                     i++;

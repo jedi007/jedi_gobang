@@ -32,10 +32,5 @@
     
     [self.view addSubview:gobangview];
 }
-- (void) touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
-    UITouch *touch = [touches anyObject];
-    CGPoint point = [touch locationInView:self.view];
-    NSLog(@"---------------x:%f  y:%f",point.x,point.y);
-}
 
 @end
