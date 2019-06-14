@@ -28,6 +28,8 @@
     
     jedi_gobang_view *gobangview = [[jedi_gobang_view alloc] initWithFrame:CGRectMake(gW*0.025, gW*0.025+topheight, gW*0.95, gW*0.95)];
     
+    init_scoretree();
+    
     [self.view addSubview:gobangview];
 }
 - (void) touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{

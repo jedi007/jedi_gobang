@@ -7,9 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "scoretree.h"
 
 NS_ASSUME_NONNULL_BEGIN
-
 
 @interface Board_point : NSObject
 
@@ -21,9 +21,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
+
 @interface gobang_board : NSObject
--(bool)add_chess:(Board_point*)point;
--(int)get_chess_color:(int)x y:(int)y;
+
+- (bool)add_chess:(Board_point*)point;
+- (int) get_chess_color:(int)x y:(int)y;
+- (int) isOver:(Board_point*)point;
+
 @end
 
 static NSInteger kBoardSize = 15;

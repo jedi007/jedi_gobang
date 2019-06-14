@@ -14,6 +14,8 @@
 		7CD1EFDA226D855800D85AB5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7CD1EFD8226D855800D85AB5 /* LaunchScreen.storyboard */; };
 		7CD1EFDD226D855800D85AB5 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 7CD1EFDC226D855800D85AB5 /* main.m */; };
 		7CD1EFE9226D860100D85AB5 /* jedi_gobang_view.m in Sources */ = {isa = PBXBuildFile; fileRef = 7CD1EFE8226D860100D85AB5 /* jedi_gobang_view.m */; };
+		8BBD6DA222B2432D0032C84D /* NSString+Reverse.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BBD6DA122B2432D0032C84D /* NSString+Reverse.m */; };
+		8BBD6DA522B252EA0032C84D /* scoretree.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BBD6DA422B252EA0032C84D /* scoretree.m */; };
 		8BD42DF122AF985E00E0D395 /* gobang_board.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BD42DF022AF985E00E0D395 /* gobang_board.m */; };
 /* End PBXBuildFile section */
 
@@ -30,6 +32,10 @@
 		7CD1EFDC226D855800D85AB5 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		7CD1EFE7226D860100D85AB5 /* jedi_gobang_view.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = jedi_gobang_view.h; sourceTree = "<group>"; };
 		7CD1EFE8226D860100D85AB5 /* jedi_gobang_view.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = jedi_gobang_view.m; sourceTree = "<group>"; };
+		8BBD6DA022B2432D0032C84D /* NSString+Reverse.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSString+Reverse.h"; sourceTree = "<group>"; };
+		8BBD6DA122B2432D0032C84D /* NSString+Reverse.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSString+Reverse.m"; sourceTree = "<group>"; };
+		8BBD6DA322B252EA0032C84D /* scoretree.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = scoretree.h; sourceTree = "<group>"; };
+		8BBD6DA422B252EA0032C84D /* scoretree.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = scoretree.m; sourceTree = "<group>"; };
 		8BD42DEF22AF985E00E0D395 /* gobang_board.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = gobang_board.h; sourceTree = "<group>"; };
 		8BD42DF022AF985E00E0D395 /* gobang_board.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = gobang_board.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -48,6 +54,7 @@
 		7CD1EFC1226D855600D85AB5 = {
 			isa = PBXGroup;
 			children = (
+				8BBD6D9C22B242CF0032C84D /* modules */,
 				7CD1EFE6226D85DD00D85AB5 /* jedi_gobang_core */,
 				7CD1EFCC226D855600D85AB5 /* jedi_gobang */,
 				7CD1EFCB226D855600D85AB5 /* Products */,
@@ -85,8 +92,19 @@
 				7CD1EFE8226D860100D85AB5 /* jedi_gobang_view.m */,
 				8BD42DEF22AF985E00E0D395 /* gobang_board.h */,
 				8BD42DF022AF985E00E0D395 /* gobang_board.m */,
+				8BBD6DA322B252EA0032C84D /* scoretree.h */,
+				8BBD6DA422B252EA0032C84D /* scoretree.m */,
 			);
 			name = jedi_gobang_core;
+			sourceTree = "<group>";
+		};
+		8BBD6D9C22B242CF0032C84D /* modules */ = {
+			isa = PBXGroup;
+			children = (
+				8BBD6DA022B2432D0032C84D /* NSString+Reverse.h */,
+				8BBD6DA122B2432D0032C84D /* NSString+Reverse.m */,
+			);
+			path = modules;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -161,8 +179,10 @@
 			files = (
 				8BD42DF122AF985E00E0D395 /* gobang_board.m in Sources */,
 				7CD1EFE9226D860100D85AB5 /* jedi_gobang_view.m in Sources */,
+				8BBD6DA222B2432D0032C84D /* NSString+Reverse.m in Sources */,
 				7CD1EFD2226D855600D85AB5 /* ViewController.m in Sources */,
 				7CD1EFDD226D855800D85AB5 /* main.m in Sources */,
+				8BBD6DA522B252EA0032C84D /* scoretree.m in Sources */,
 				7CD1EFCF226D855600D85AB5 /* AppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
