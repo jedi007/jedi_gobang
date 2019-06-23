@@ -20,6 +20,8 @@
 @property (nonatomic, readwrite) CGPoint ocenter;
 @property (nonatomic, readwrite) CGRect ofram;
 @property (nonatomic, readwrite) CGRect lastfram;
+@property (nonatomic, readwrite) CGPoint lastcenter;
+@property (nonatomic, readwrite) double lastscale;
 
 @property (nonatomic, readwrite) gobang_board* gboard;
 
@@ -36,8 +38,9 @@
         
         _gboard = [[gobang_board alloc] init];
         
-        _ocenter = self.center;
         _lastfram = _ofram = self.frame;
+        _lastcenter = _ocenter = self.center;
+        _lastscale = 1;
         
         self.backgroundColor = [UIColor colorWithRed:230.0/255.0 green:192.0/255.0 blue:148.0/255.0 alpha:1.0];
         
@@ -46,7 +49,7 @@
         self.layer.shadowRadius = 3;// 阴影扩散的范围控制
         self.layer.shadowOffset  = CGSizeMake(5, 3);// 阴影的偏移范围
         
-        self.userInteractionEnabled = true;
+        //self.userInteractionEnabled = true;
         UIPinchGestureRecognizer *PinRecognizer = [[UIPinchGestureRecognizer alloc]
                                                    initWithTarget:self
                                                    action:@selector(foundPinch:)];
@@ -170,14 +173,43 @@
             double scale=recognizer.scale;
             NSLog(@"scale : %1.3f",scale);
             
-            self.frame = CGRectMake(_lastfram.origin.x, _lastfram.origin.y , _lastfram.size.height*scale , _lastfram.size.width*scale );
-            [self initruntimeinfo];
+            if( fabs(_lastscale - scale) < 0.01 )
+            {
+                return;
+            }
+            _lastscale = scale;
             
+            NSUInteger touchCount = recognizer.numberOfTouches;
+            if (touchCount == 2)
+            {
+                CGPoint p1 = [recognizer locationOfTouch: 0 inView:self ];
+                CGPoint p2 = [recognizer locationOfTouch: 1 inView:self ];
+                CGPoint newCenter = CGPointMake( (p1.x+p2.x)/2 , (p1.y+p2.y)/2 );
+                
+                CGFloat targetW = _lastfram.size.width*scale;
+                CGFloat targetH = _lastfram.size.height*scale;
+                if( targetH<_ofram.size.height )
+                {
+                    targetW = _ofram.size.width;
+                    targetH = _ofram.size.height;
+                }
+                
+                self.frame = CGRectMake(_lastfram.origin.x, _lastfram.origin.y , targetW , targetH );
+                self.frame = CGRectMake(_lastfram.origin.x, _ofram.origin.y-self.frame.size.height+_ofram.size.height , targetW , targetH );
+                
+                //self.center = newCenter;
+                [self initruntimeinfo];
+                
+                NSLog(@"p1:%1.2f-%1.2f p2:%1.2f-%1.2f pnew:%1.2f-%1.2f",p1.x,p1.y,p2.x,p2.y,newCenter.x,newCenter.y);
+                
+            }
             break;
         }
         case UIGestureRecognizerStateEnded://缩放结束
         {
+            _lastcenter =  self.center;
             _lastfram = self.frame;
+            _lastscale = 1;
             break;
         }
         default:
