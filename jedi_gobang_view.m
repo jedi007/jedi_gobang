@@ -31,6 +31,8 @@
 
 @implementation jedi_gobang_view
 
+NSTimer* timer;//用于区分棋盘点单击和双击
+
 - (id) initWithFrame:(CGRect)frame{
     self = [super initWithFrame:frame];
     
@@ -57,10 +59,14 @@
         UITapGestureRecognizer* TapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(foundTap:)];
         [TapRecognizer setNumberOfTapsRequired:1];
         
+        UITapGestureRecognizer* doubleTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(foundDoubleTap:)];
+        [doubleTapRecognizer setNumberOfTapsRequired:2];
+        
         UIPanGestureRecognizer* PanRecognizer = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(foundPan:)];
         PanRecognizer.minimumNumberOfTouches = 1;
         
         [self addGestureRecognizer:TapRecognizer];
+        [self addGestureRecognizer:doubleTapRecognizer];
         [self addGestureRecognizer:PinRecognizer];
         [self addGestureRecognizer:PanRecognizer];
     }
@@ -211,9 +217,7 @@
         }
         case UIGestureRecognizerStateEnded://缩放结束
         {
-            _lastcenter =  self.center;
-            _lastfram = self.frame;
-            _lastscale = 1;
+            [self endGestureRecognizer];
             break;
         }
         default:
@@ -223,16 +227,46 @@
 
 - (void)foundTap:(UITapGestureRecognizer *)recognizer
 {
+    [timer invalidate];
     CGPoint point = [recognizer locationInView:self];
-    Board_point *bpoint = [self getbPoint:point];
-    NSLog(@"found tap bPoint ---- row:%ld  col:%ld",(long)bpoint.index_row,(long)bpoint.index_col);
+    timer = [NSTimer scheduledTimerWithTimeInterval:0.2 repeats:NO block:^(NSTimer* timer){
+        NSLog(@"timer is out");
+        [timer invalidate];
+        NSLog(@"after invalidate timer is: %@",timer);
+        
+        //CGPoint point = [recognizer locationInView:self];
+        Board_point *bpoint = [self getbPoint:point];
+        NSLog(@"found tap bPoint ---- row:%ld  col:%ld",(long)bpoint.index_row,(long)bpoint.index_col);
+        
+        if( [self->_gboard add_chess:bpoint] )
+        {
+            self->_lastfram = self.frame = self->_ofram;
+            [self initruntimeinfo];
+            [self setNeedsDisplay];
+        }
+    }];
+    [[NSRunLoop currentRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
+}
+
+- (void)foundDoubleTap:(UITapGestureRecognizer *)recognizer
+{
+    [timer invalidate];
     
-    if( [_gboard add_chess:bpoint] )
-    {
-        _lastfram = self.frame = _ofram;
-        [self initruntimeinfo];
-        [self setNeedsDisplay];
-    }
+    CGPoint newCenter = [recognizer locationInView:self];
+    NSLog(@"foundDoubleTap and newCenter: %1.2f - %1.2f",newCenter.x,newCenter.y);
+    _PinchPerCenter = CGPointMake(newCenter.x/_fW, newCenter.y/_fH);
+    _PinchRelativeCenter = [self convertPoint:newCenter toView:self.superview];
+    
+    CGFloat targetW = _lastfram.size.width*1.3;
+    CGFloat targetH = _lastfram.size.height*1.3;
+    CGPoint finger_center = CGPointMake(targetW*_PinchPerCenter.x, targetH*_PinchPerCenter.y);
+    CGFloat targetX = -(finger_center.x-_PinchRelativeCenter.x);
+    CGFloat targetY = -(finger_center.y-_PinchRelativeCenter.y);
+    
+    self.frame = [self makeTargetFrame:targetX targetY:targetY targetW:targetW targetH:targetH];
+    
+    [self initruntimeinfo];
+    [self endGestureRecognizer];
 }
 
 - (void)foundPan:(UIPanGestureRecognizer *)pan
@@ -252,8 +286,7 @@
         case UIGestureRecognizerStateEnded://结束
         {
             NSLog(@"foundPan end");
-            _lastcenter =  self.center;
-            _lastfram = self.frame;
+            [self endGestureRecognizer];
             break;
         }
         default:
@@ -290,6 +323,13 @@
     rect.size.width = targetW;
     rect.size.height = targetH;
     return rect;
+}
+
+- (void)endGestureRecognizer
+{
+    _lastcenter =  self.center;
+    _lastfram = self.frame;
+    _lastscale = 1;
 }
 
 @end
