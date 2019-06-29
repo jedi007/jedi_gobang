@@ -18,6 +18,8 @@
 @property (nonatomic, readwrite) double keyboardH;
 
 @property (nonatomic, readwrite) CGPoint ocenter;
+@property (nonatomic, readwrite) CGPoint PinchPerCenter;//按百分比描述到缩放中心
+@property (nonatomic, readwrite) CGPoint PinchRelativeCenter;//以两根手指中心点为缩放中心，该中心相对显示view的左上角相对坐标始终不变
 @property (nonatomic, readwrite) CGRect ofram;
 @property (nonatomic, readwrite) CGRect lastfram;
 @property (nonatomic, readwrite) CGPoint lastcenter;
@@ -46,8 +48,8 @@
         
         self.layer.shadowOpacity = 0.8;// 阴影透明度
         self.layer.shadowColor = [UIColor grayColor].CGColor;// 阴影的颜色
-        self.layer.shadowRadius = 3;// 阴影扩散的范围控制
-        self.layer.shadowOffset  = CGSizeMake(5, 3);// 阴影的偏移范围
+        self.layer.shadowRadius = 2;// 阴影扩散的范围控制
+        self.layer.shadowOffset  = CGSizeMake(4, 3);// 阴影的偏移范围
         
         //self.userInteractionEnabled = true;
         UIPinchGestureRecognizer *PinRecognizer = [[UIPinchGestureRecognizer alloc]
@@ -164,14 +166,25 @@
 
 - (void)foundPinch:(UIPinchGestureRecognizer *)recognizer
 {
-    NSLog(@"foundPinch");
+    //NSLog(@"foundPinch");
     
     switch (recognizer.state) {
         case UIGestureRecognizerStateBegan://缩放开始
+        {
+            NSUInteger touchCount = recognizer.numberOfTouches;
+            if (touchCount == 2)
+            {
+                CGPoint p1 = [recognizer locationOfTouch: 0 inView:self ];
+                CGPoint p2 = [recognizer locationOfTouch: 1 inView:self ];
+                CGPoint newCenter = CGPointMake( (p1.x+p2.x)/2 , (p1.y+p2.y)/2 );
+                _PinchPerCenter = CGPointMake(newCenter.x/_fW, newCenter.y/_fH);
+                
+                _PinchRelativeCenter = [self convertPoint:newCenter toView:self.superview];
+            }
+        }
         case UIGestureRecognizerStateChanged://缩放改变
         {
             double scale=recognizer.scale;
-            NSLog(@"scale : %1.3f",scale);
             
             if( fabs(_lastscale - scale) < 0.01 )
             {
@@ -182,10 +195,6 @@
             NSUInteger touchCount = recognizer.numberOfTouches;
             if (touchCount == 2)
             {
-                CGPoint p1 = [recognizer locationOfTouch: 0 inView:self ];
-                CGPoint p2 = [recognizer locationOfTouch: 1 inView:self ];
-                CGPoint newCenter = CGPointMake( (p1.x+p2.x)/2 , (p1.y+p2.y)/2 );
-                
                 CGFloat targetW = _lastfram.size.width*scale;
                 CGFloat targetH = _lastfram.size.height*scale;
                 if( targetH<_ofram.size.height )
@@ -194,14 +203,23 @@
                     targetH = _ofram.size.height;
                 }
                 
-                self.frame = CGRectMake(_lastfram.origin.x, _lastfram.origin.y , targetW , targetH );
-                self.frame = CGRectMake(_lastfram.origin.x, _ofram.origin.y-self.frame.size.height+_ofram.size.height , targetW , targetH );
+                CGPoint finger_center = CGPointMake(targetW*_PinchPerCenter.x, targetH*_PinchPerCenter.y);
+                CGFloat targetX = -(finger_center.x-_PinchRelativeCenter.x);
+                CGFloat targetY = -(finger_center.y-_PinchRelativeCenter.y);
+                if( targetX > 0 )
+                    targetX = 0;
+                else if( targetX < (-targetW+_ofram.size.width) )
+                    targetX = -targetW+_ofram.size.width;
                 
-                //self.center = newCenter;
+                if( targetY > 0 )
+                    targetY = 0;
+                else if ( targetY < (-targetH+_ofram.size.height) )
+                    targetY = (-targetH+_ofram.size.height);
+                
+                
+                self.frame = CGRectMake( targetX, targetY, targetW, targetH);
+                
                 [self initruntimeinfo];
-                
-                NSLog(@"p1:%1.2f-%1.2f p2:%1.2f-%1.2f pnew:%1.2f-%1.2f",p1.x,p1.y,p2.x,p2.y,newCenter.x,newCenter.y);
-                
             }
             break;
         }

@@ -26,11 +26,16 @@
     //那么导航栏+状态栏的高度
     int topheight = statusRect.size.height+navRect.size.height;
     
-    jedi_gobang_view *gobangview = [[jedi_gobang_view alloc] initWithFrame:CGRectMake(gW*0.025, gW*0.025+topheight, gW*0.95, gW*0.95)];
+    UIView* gobang_showview = [[UIView alloc] initWithFrame:CGRectMake(gW*0.025, gW*0.025+topheight, gW*0.95, gW*0.95)];
+    gobang_showview.clipsToBounds = YES;//超出边界点子视图内容裁掉
+    
+    jedi_gobang_view *gobangview = [[jedi_gobang_view alloc] initWithFrame:CGRectMake(0, 0, gW*0.95, gW*0.95)];
     
     init_scoretree();
     
-    [self.view addSubview:gobangview];
+    
+    [gobang_showview addSubview:gobangview];
+    [self.view addSubview:gobang_showview];
 }
 
 @end
