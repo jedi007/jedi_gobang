@@ -198,27 +198,12 @@
             {
                 CGFloat targetW = _lastfram.size.width*scale;
                 CGFloat targetH = _lastfram.size.height*scale;
-                if( targetH<_ofram.size.height )
-                {
-                    targetW = _ofram.size.width;
-                    targetH = _ofram.size.height;
-                }
                 
                 CGPoint finger_center = CGPointMake(targetW*_PinchPerCenter.x, targetH*_PinchPerCenter.y);
                 CGFloat targetX = -(finger_center.x-_PinchRelativeCenter.x);
                 CGFloat targetY = -(finger_center.y-_PinchRelativeCenter.y);
-                if( targetX > 0 )
-                    targetX = 0;
-                else if( targetX < (-targetW+_ofram.size.width) )
-                    targetX = -targetW+_ofram.size.width;
                 
-                if( targetY > 0 )
-                    targetY = 0;
-                else if ( targetY < (-targetH+_ofram.size.height) )
-                    targetY = (-targetH+_ofram.size.height);
-                
-                
-                self.frame = CGRectMake( targetX, targetY, targetW, targetH);
+                self.frame = [self makeTargetFrame:targetX targetY:targetY targetW:targetW targetH:targetH];
                 
                 [self initruntimeinfo];
             }
@@ -257,26 +242,11 @@
     
     switch (pan.state) {
         case UIGestureRecognizerStateBegan://开始
-        {
-            NSLog(@"foundPan begin");
-            //self.frame = CGRectMake( _lastfram.origin.x+point.x, _lastfram.origin.y+point.y, _lastfram.size.width, _lastfram.size.height);
-            break;
-        }
         case UIGestureRecognizerStateChanged://改变
         {
-            NSLog(@"foundPan change");
             CGFloat targetX = _lastfram.origin.x+point.x;
             CGFloat targetY = _lastfram.origin.y+point.y;
-            if( targetX > 0 )
-                targetX = 0;
-            else if( targetX < (-_lastfram.size.width+_ofram.size.width) )
-                targetX = -_lastfram.size.width+_ofram.size.width;
-            
-            if( targetY > 0 )
-                targetY = 0;
-            else if ( targetY < (-_lastfram.size.height+_ofram.size.height) )
-                targetY = (-_lastfram.size.height+_ofram.size.height);
-            self.frame = CGRectMake( targetX, targetY, _lastfram.size.width, _lastfram.size.height);
+            self.frame = [self makeTargetFrame:targetX targetY:targetY targetW:_lastfram.size.width targetH:_lastfram.size.height];
             break;
         }
         case UIGestureRecognizerStateEnded://结束
@@ -284,18 +254,42 @@
             NSLog(@"foundPan end");
             _lastcenter =  self.center;
             _lastfram = self.frame;
-            _lastscale = 1;
             break;
         }
         default:
             break;
     }
     
-    
-    
     //pan.view.transform =CGAffineTransformMakeTranslation(point.x, point.y);
     //pan.view.transform = CGAffineTransformTranslate(pan.view.transform, point.x, point.y);
     //[pan setTranslation:CGPointZero inView:pan.view];
+}
+
+- (CGRect)makeTargetFrame:(CGFloat)targetX targetY:(CGFloat)targetY targetW:(CGFloat)targetW targetH:(CGFloat)targetH
+{
+    CGRect rect;
+    
+    if( targetH < _ofram.size.height )
+    {
+        targetW = _ofram.size.width;
+        targetH = _ofram.size.height;
+    }
+    
+    if( targetX > 0 )
+        targetX = 0;
+    else if( targetX < (-targetW+_ofram.size.width) )
+        targetX = -targetW+_ofram.size.width;
+    
+    if( targetY > 0 )
+        targetY = 0;
+    else if ( targetY < (-targetH+_ofram.size.height) )
+        targetY = (-targetH+_ofram.size.height);
+    
+    rect.origin.x = targetX;
+    rect.origin.y = targetY;
+    rect.size.width = targetW;
+    rect.size.height = targetH;
+    return rect;
 }
 
 @end
