@@ -7,8 +7,7 @@
 //
 
 #import "ViewController.h"
-
-
+#import "../jedi_gobang_Controller.h"
 
 
 @implementation ViewController
@@ -26,16 +25,9 @@
     //那么导航栏+状态栏的高度
     int topheight = statusRect.size.height+navRect.size.height;
     
-    UIView* gobang_showview = [[UIView alloc] initWithFrame:CGRectMake(gW*0.025, gW*0.025+topheight, gW*0.95, gW*0.95)];
-    gobang_showview.clipsToBounds = YES;//超出边界点子视图内容裁掉
-    
-    jedi_gobang_view *gobangview = [[jedi_gobang_view alloc] initWithFrame:CGRectMake(0, 0, gW*0.95, gW*0.95)];
-    
-    init_scoretree();
-    
-    
-    [gobang_showview addSubview:gobangview];
-    [self.view addSubview:gobang_showview];
+    jedi_gobang_Controller* gobang_controller = [[jedi_gobang_Controller alloc] initWithViewFrame:CGRectMake(gW*0.025, gW*0.025+topheight, gW*0.95, gW*0.95)];
+    //[gobang_controller setViewFrame:CGRectMake(0, gW*0.95+10, 200, 200)];
+    [self.view addSubview:gobang_controller.view];
 }
 
 @end

@@ -33,45 +33,39 @@
 
 NSTimer* timer;//用于区分棋盘点单击和双击
 
-- (id) initWithFrame:(CGRect)frame{
-    self = [super initWithFrame:frame];
+- (void)setFrameForReSet:(CGRect)frame
+{
+    _lastfram = _ofram = self.frame = frame;
+    [self initruntimeinfo];
     
-    if(self)
-    {
-        [self initruntimeinfo];
-        
-        _gboard = [[gobang_board alloc] init];
-        
-        _lastfram = _ofram = self.frame;
-        _lastcenter = _ocenter = self.center;
-        _lastscale = 1;
-        
-        self.backgroundColor = [UIColor colorWithRed:230.0/255.0 green:192.0/255.0 blue:148.0/255.0 alpha:1.0];
-        
-        self.layer.shadowOpacity = 0.8;// 阴影透明度
-        self.layer.shadowColor = [UIColor grayColor].CGColor;// 阴影的颜色
-        self.layer.shadowRadius = 2;// 阴影扩散的范围控制
-        self.layer.shadowOffset  = CGSizeMake(4, 3);// 阴影的偏移范围
-        
-        //self.userInteractionEnabled = true;
-        UIPinchGestureRecognizer* PinRecognizer = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(foundPinch:)];
-        
-        UITapGestureRecognizer* TapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(foundTap:)];
-        [TapRecognizer setNumberOfTapsRequired:1];
-        
-        UITapGestureRecognizer* doubleTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(foundDoubleTap:)];
-        [doubleTapRecognizer setNumberOfTapsRequired:2];
-        
-        UIPanGestureRecognizer* PanRecognizer = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(foundPan:)];
-        PanRecognizer.minimumNumberOfTouches = 1;
-        
-        [self addGestureRecognizer:TapRecognizer];
-        [self addGestureRecognizer:doubleTapRecognizer];
-        [self addGestureRecognizer:PinRecognizer];
-        [self addGestureRecognizer:PanRecognizer];
-    }
+    _gboard = [[gobang_board alloc] init];
     
-    return self;
+    _lastcenter = _ocenter = self.center;
+    _lastscale = 1;
+    
+    self.backgroundColor = [UIColor colorWithRed:230.0/255.0 green:192.0/255.0 blue:148.0/255.0 alpha:1.0];
+    
+    self.layer.shadowOpacity = 0.8;// 阴影透明度
+    self.layer.shadowColor = [UIColor grayColor].CGColor;// 阴影的颜色
+    self.layer.shadowRadius = 2;// 阴影扩散的范围控制
+    self.layer.shadowOffset  = CGSizeMake(4, 3);// 阴影的偏移范围
+    
+    //self.userInteractionEnabled = true;
+    UIPinchGestureRecognizer* PinRecognizer = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(foundPinch:)];
+    
+    UITapGestureRecognizer* TapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(foundTap:)];
+    [TapRecognizer setNumberOfTapsRequired:1];
+    
+    UITapGestureRecognizer* doubleTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(foundDoubleTap:)];
+    [doubleTapRecognizer setNumberOfTapsRequired:2];
+    
+    UIPanGestureRecognizer* PanRecognizer = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(foundPan:)];
+    PanRecognizer.minimumNumberOfTouches = 1;
+    
+    [self addGestureRecognizer:TapRecognizer];
+    [self addGestureRecognizer:doubleTapRecognizer];
+    [self addGestureRecognizer:PinRecognizer];
+    [self addGestureRecognizer:PanRecognizer];
 }
 
 - (void) initruntimeinfo
@@ -238,11 +232,18 @@ NSTimer* timer;//用于区分棋盘点单击和双击
         Board_point *bpoint = [self getbPoint:point];
         NSLog(@"found tap bPoint ---- row:%ld  col:%ld",(long)bpoint.index_row,(long)bpoint.index_col);
         
+        int overkey = [self->_gboard isOver:bpoint];
+        
         if( [self->_gboard add_chess:bpoint] )
         {
             self->_lastfram = self.frame = self->_ofram;
             [self initruntimeinfo];
             [self setNeedsDisplay];
+        }
+        
+        if( overkey )
+        {
+            
         }
     }];
     [[NSRunLoop currentRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
@@ -331,5 +332,28 @@ NSTimer* timer;//用于区分棋盘点单击和双击
     _lastfram = self.frame;
     _lastscale = 1;
 }
+
+//-(void)showAlertViewTitle:(NSString *)title subTitle:(NSString *)subTitle openUrl:(NSString *)openUrl{
+//    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:title message:subTitle preferredStyle:UIAlertControllerStyleAlert];
+//    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+//        
+//    }];
+//    UIAlertAction *sure = [UIAlertAction actionWithTitle:@"更新" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+//        if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 10.0) {
+//            
+//            //设备系统为IOS 10.0或者以上的
+//            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:openUrl] options:@{} completionHandler:^(BOOL success) {
+//                
+//            }];
+//        }else{
+//            
+//            //设备系统为IOS 10.0以下的
+//            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:openUrl]];
+//        }
+//    }];
+//    [alertVC addAction:cancel];
+//    [alertVC addAction:sure];
+//    [self presentViewController:alertVC animated:YES completion:nil];
+//}
 
 @end

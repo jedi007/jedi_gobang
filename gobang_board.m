@@ -88,6 +88,9 @@ int current_color = 1;
 
 - (int) isOver:(Board_point*)point
 {
+    if([point isNULL] || point.index_row < 0 || point.index_col < 0 )
+        return 0;
+        
     short score = [self get_score:point];
     
     NSLog(@"score is %d",score);

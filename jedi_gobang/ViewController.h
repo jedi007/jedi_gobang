@@ -8,8 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-#import "../jedi_gobang_view.h"
-
 @interface ViewController : UIViewController
 
 
