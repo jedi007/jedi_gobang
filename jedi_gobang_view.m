@@ -52,17 +52,17 @@
         self.layer.shadowOffset  = CGSizeMake(4, 3);// 阴影的偏移范围
         
         //self.userInteractionEnabled = true;
-        UIPinchGestureRecognizer *PinRecognizer = [[UIPinchGestureRecognizer alloc]
-                                                   initWithTarget:self
-                                                   action:@selector(foundPinch:)];
+        UIPinchGestureRecognizer* PinRecognizer = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(foundPinch:)];
         
-        
-        UITapGestureRecognizer *TapRecognizer = [[UITapGestureRecognizer alloc]
-                                                   initWithTarget:self
-                                                   action:@selector(foundTap:)];
+        UITapGestureRecognizer* TapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(foundTap:)];
         [TapRecognizer setNumberOfTapsRequired:1];
+        
+        UIPanGestureRecognizer* PanRecognizer = [[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(foundPan:)];
+        PanRecognizer.minimumNumberOfTouches = 1;
+        
         [self addGestureRecognizer:TapRecognizer];
         [self addGestureRecognizer:PinRecognizer];
+        [self addGestureRecognizer:PanRecognizer];
     }
     
     return self;
@@ -181,6 +181,7 @@
                 
                 _PinchRelativeCenter = [self convertPoint:newCenter toView:self.superview];
             }
+            break;
         }
         case UIGestureRecognizerStateChanged://缩放改变
         {
@@ -248,4 +249,53 @@
         [self setNeedsDisplay];
     }
 }
+
+- (void)foundPan:(UIPanGestureRecognizer *)pan
+{
+    //NSLog(@"foundPan is called");
+    CGPoint point = [pan translationInView:pan.view];
+    
+    switch (pan.state) {
+        case UIGestureRecognizerStateBegan://开始
+        {
+            NSLog(@"foundPan begin");
+            //self.frame = CGRectMake( _lastfram.origin.x+point.x, _lastfram.origin.y+point.y, _lastfram.size.width, _lastfram.size.height);
+            break;
+        }
+        case UIGestureRecognizerStateChanged://改变
+        {
+            NSLog(@"foundPan change");
+            CGFloat targetX = _lastfram.origin.x+point.x;
+            CGFloat targetY = _lastfram.origin.y+point.y;
+            if( targetX > 0 )
+                targetX = 0;
+            else if( targetX < (-_lastfram.size.width+_ofram.size.width) )
+                targetX = -_lastfram.size.width+_ofram.size.width;
+            
+            if( targetY > 0 )
+                targetY = 0;
+            else if ( targetY < (-_lastfram.size.height+_ofram.size.height) )
+                targetY = (-_lastfram.size.height+_ofram.size.height);
+            self.frame = CGRectMake( targetX, targetY, _lastfram.size.width, _lastfram.size.height);
+            break;
+        }
+        case UIGestureRecognizerStateEnded://结束
+        {
+            NSLog(@"foundPan end");
+            _lastcenter =  self.center;
+            _lastfram = self.frame;
+            _lastscale = 1;
+            break;
+        }
+        default:
+            break;
+    }
+    
+    
+    
+    //pan.view.transform =CGAffineTransformMakeTranslation(point.x, point.y);
+    //pan.view.transform = CGAffineTransformTranslate(pan.view.transform, point.x, point.y);
+    //[pan setTranslation:CGPointZero inView:pan.view];
+}
+
 @end
