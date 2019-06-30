@@ -10,10 +10,15 @@
 
 #import "modules/NSString+Reverse.h"
 
-#define add_index_scoretree         if( current_color == boardarray[i][j] )\
-                                        index_scoretree += pow(3,4+y);\
+#define add_index_scoretree         if(i<0 || i>(kBoardSize-1) || j<0 || j>(kBoardSize-1) )\
+                                    {\
+                                        index_scoretree += 2*pow(3,y);\
+                                        continue;\
+                                    }\
+                                    if( current_color == boardarray[i][j] )\
+                                        index_scoretree += pow(3,y);\
                                     else if( -1*current_color == boardarray[i][j] )\
-                                        index_scoretree += 2*pow(3,4+y);\
+                                        index_scoretree += 2*pow(3,y);\
 
 @implementation Board_point
 - (id) init
@@ -88,7 +93,7 @@ int current_color = 1;
 
 - (int) isOver:(Board_point*)point
 {
-    if([point isNULL] || point.index_row < 0 || point.index_col < 0 )
+    if([point isNULL] || point.index_row <= 0 || point.index_col <= 0 )
         return 0;
         
     short score = [self get_score:point];
@@ -110,15 +115,14 @@ int current_color = 1;
 - (short) get_L_R_score:(Board_point*)point
 {
     int index_scoretree = 0;
-    NSLog(@"current color is %d",current_color);
-    for(int i = point.index_row-1,j = point.index_col-2, y = 0; j>0;--j,++y)
+    for(int i = point.index_row-1,j = point.index_col-2, y = 4; y<8 ;--j,++y)//落子点左边4位：3^7 3^6 3^5 3^4  右边4位：3^3 3^2 3^1 3^0
     {
         add_index_scoretree
 //        else if( 0 == boardarray[point.index_row][j] )
 //            index_scoretree += 0;
 //+0 等于不加
     }
-    for(int i = point.index_row-1,j = point.index_col, y = 0; j<kBoardSize;++j,++y)
+    for(int i = point.index_row-1,j = point.index_col, y = 3; y>=0;++j,--y)//落子点左边4位：3^7 3^6 3^5 3^4  右边4位：3^3 3^2 3^1 3^0
     {
         add_index_scoretree
     }
@@ -129,11 +133,11 @@ int current_color = 1;
 - (short) get_U_D_score:(Board_point*)point
 {
     int index_scoretree = 0;
-    for(int i = point.index_row-2,j = point.index_col-1, y = 0; i>0;--i,++y)
+    for(int i = point.index_row-2,j = point.index_col-1, y = 4; y<8 ;--i,++y)
     {
         add_index_scoretree
     }
-    for(int i = point.index_row,j = point.index_col-1, y = 0; i<kBoardSize;++i,++y)
+    for(int i = point.index_row,j = point.index_col-1, y = 3; y>=0 ;++i,--y)
     {
         add_index_scoretree
     }
@@ -144,11 +148,11 @@ int current_color = 1;
 - (short) get_LT_RD_score:(Board_point*)point
 {
     int index_scoretree = 0;
-    for(int i = point.index_row-2,j = point.index_col-2, y = 0; i>0 && j>0;--i,--j,++y)
+    for(int i = point.index_row-2,j = point.index_col-2, y = 4; y<8 ;--i,--j,++y)
     {
         add_index_scoretree
     }
-    for(int i = point.index_row,j = point.index_col, y = 0; i<kBoardSize && j<kBoardSize;++i,++j,++y)
+    for(int i = point.index_row,j = point.index_col, y = 3; y>=0 ;++i,++j,--y)
     {
         add_index_scoretree
     }
@@ -159,11 +163,11 @@ int current_color = 1;
 - (short) get_RT_LD_score:(Board_point*)point
 {
     int index_scoretree = 0;
-    for(int i = point.index_row-2,j = point.index_col, y = 0; i>0 && j>0;--i,++j,++y)
+    for(int i = point.index_row-2,j = point.index_col, y = 4; y<8 ;--i,++j,++y)
     {
         add_index_scoretree
     }
-    for(int i = point.index_row,j = point.index_col-2, y = 0; i<kBoardSize && j<kBoardSize;++i,--j,++y)
+    for(int i = point.index_row,j = point.index_col-2, y = 3; y>=0;++i,--j,--y)
     {
         add_index_scoretree
     }
