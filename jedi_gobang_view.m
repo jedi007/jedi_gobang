@@ -241,12 +241,25 @@ NSTimer* timer;//用于区分棋盘点单击和双击
             [self setNeedsDisplay];
         }
         
+        NSLog(@"引发通知！！！ overkey:%d",overkey);
         if( overkey )
         {
-            
+            [NSTimer scheduledTimerWithTimeInterval:0.2 repeats:NO block:^(NSTimer* timer){
+                [self emit_AlertWinner_Nofiyi];
+                //引发通知
+                //[[NSNotificationCenter defaultCenter] postNotificationName:@"AlertWinner" object:@"123"];
+            }];
         }
     }];
     [[NSRunLoop currentRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
+}
+
+-(void)emit_AlertWinner_Nofiyi
+{
+    NSLog(@"引发通知！！！");
+    //引发通知
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"AlertWinner" object:@"123"];
+    NSLog(@"通知完成！！！");
 }
 
 - (void)foundDoubleTap:(UITapGestureRecognizer *)recognizer
@@ -332,28 +345,5 @@ NSTimer* timer;//用于区分棋盘点单击和双击
     _lastfram = self.frame;
     _lastscale = 1;
 }
-
-//-(void)showAlertViewTitle:(NSString *)title subTitle:(NSString *)subTitle openUrl:(NSString *)openUrl{
-//    UIAlertController *alertVC = [UIAlertController alertControllerWithTitle:title message:subTitle preferredStyle:UIAlertControllerStyleAlert];
-//    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-//        
-//    }];
-//    UIAlertAction *sure = [UIAlertAction actionWithTitle:@"更新" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-//        if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 10.0) {
-//            
-//            //设备系统为IOS 10.0或者以上的
-//            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:openUrl] options:@{} completionHandler:^(BOOL success) {
-//                
-//            }];
-//        }else{
-//            
-//            //设备系统为IOS 10.0以下的
-//            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:openUrl]];
-//        }
-//    }];
-//    [alertVC addAction:cancel];
-//    [alertVC addAction:sure];
-//    [self presentViewController:alertVC animated:YES completion:nil];
-//}
 
 @end
