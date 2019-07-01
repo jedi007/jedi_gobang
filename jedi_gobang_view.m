@@ -245,21 +245,13 @@ NSTimer* timer;//用于区分棋盘点单击和双击
         if( overkey )
         {
             [NSTimer scheduledTimerWithTimeInterval:0.2 repeats:NO block:^(NSTimer* timer){
-                [self emit_AlertWinner_Nofiyi];
+                NSString* color = overkey==1?@"黑方":@"白方";
                 //引发通知
-                //[[NSNotificationCenter defaultCenter] postNotificationName:@"AlertWinner" object:@"123"];
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"AlertWinner" object:color];
             }];
         }
     }];
     [[NSRunLoop currentRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
-}
-
--(void)emit_AlertWinner_Nofiyi
-{
-    NSLog(@"引发通知！！！");
-    //引发通知
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"AlertWinner" object:@"123"];
-    NSLog(@"通知完成！！！");
 }
 
 - (void)foundDoubleTap:(UITapGestureRecognizer *)recognizer
