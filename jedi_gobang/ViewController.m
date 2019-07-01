@@ -30,6 +30,8 @@ jedi_gobang_Controller* gobang_controller;
     gobang_controller = [[jedi_gobang_Controller alloc] initWithViewFrame:CGRectMake(gW*0.025, gW*0.025+topheight, gW*0.95, gW*0.95)];
     //[gobang_controller setViewFrame:CGRectMake(0, gW*0.95+10, 200, 200)];
     [self.view addSubview:gobang_controller.view];
+    
+    //fo test git
 }
 
 @end
