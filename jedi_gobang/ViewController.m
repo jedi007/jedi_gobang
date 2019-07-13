@@ -14,11 +14,13 @@
 
 jedi_gobang_Controller* gobang_controller;
 
+double gW;
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     
-    double gW = [[UIScreen mainScreen] bounds].size.width;
+    gW = [[UIScreen mainScreen] bounds].size.width;
     
     //获取状态栏的rect
     CGRect statusRect = [[UIApplication sharedApplication] statusBarFrame];
@@ -26,12 +28,113 @@ jedi_gobang_Controller* gobang_controller;
     CGRect navRect = self.navigationController.navigationBar.frame;
     //那么导航栏+状态栏的高度
     int topheight = statusRect.size.height+navRect.size.height;
+    NSLog(@"topheight : %d",topheight);
     
     gobang_controller = [[jedi_gobang_Controller alloc] initWithViewFrame:CGRectMake(gW*0.025, gW*0.025+topheight, gW*0.95, gW*0.95)];
     //[gobang_controller setViewFrame:CGRectMake(0, gW*0.95+10, 200, 200)];
     [self.view addSubview:gobang_controller.view];
     
-    //fo test git
+    if(![UIDevice currentDevice].generatesDeviceOrientationNotifications){
+        [[UIDevice currentDevice]beginGeneratingDeviceOrientationNotifications];
+    }
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleDeviceOrientationChange:) name:UIDeviceOrientationDidChangeNotification object:nil];
 }
+
+//设备方向改变的处理
+
+- (void)handleDeviceOrientationChange:(NSNotification*)notification{
+    UIDeviceOrientation deviceOrientation= [UIDevice currentDevice].orientation;
+    int topheight = [self getTopHeight];
+    switch(deviceOrientation){
+            
+        case UIDeviceOrientationFaceUp:
+            NSLog(@"屏幕朝上平躺");
+            break;
+        case UIDeviceOrientationFaceDown:
+            NSLog(@"屏幕朝下平躺");
+            break;
+        case UIDeviceOrientationUnknown:
+            NSLog(@"未知方向");
+            break;
+        case UIDeviceOrientationLandscapeLeft:
+            NSLog(@"屏幕向左横置");
+            NSLog(@"topheight : %d",topheight);
+            gobang_controller.view.frame = CGRectMake(gW*0.025, gW*0.025+topheight, gW*0.95, gW*0.95);
+            break;
+        case UIDeviceOrientationLandscapeRight:
+            NSLog(@"屏幕向右橫置");
+            NSLog(@"topheight : %d",topheight);
+            gobang_controller.view.frame = CGRectMake(gW*0.025, gW*0.025+topheight, gW*0.95, gW*0.95);
+            break;
+        case UIDeviceOrientationPortrait:
+            NSLog(@"屏幕直立");
+            gobang_controller.view.frame = CGRectMake(gW*0.025, gW*0.025+topheight, gW*0.95, gW*0.95);
+            break;
+        case UIDeviceOrientationPortraitUpsideDown:
+            NSLog(@"屏幕直立，上下顛倒");
+            gobang_controller.view.frame = CGRectMake(gW*0.025, gW*0.025+topheight, gW*0.95, gW*0.95);
+            break;
+        default:
+            NSLog(@"无法辨识");
+            break;
+    }
+}
+
+- (int)getTopHeight
+{
+    //获取状态栏的rect
+    CGRect statusRect = [[UIApplication sharedApplication] statusBarFrame];
+    //获取导航栏的rect
+    CGRect navRect = self.navigationController.navigationBar.frame;
+    //那么导航栏+状态栏的高度
+    int topheight = statusRect.size.height+navRect.size.height;
+    
+    return topheight;
+}
+
+- (void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+{
+    NSLog(@" in willRotateToInterfaceOrientation ");
+    switch (toInterfaceOrientation) {
+        case UIDeviceOrientationUnknown:
+            NSLog(@"未知方向");
+            break;
+        case UIDeviceOrientationLandscapeLeft:
+            NSLog(@"屏幕向左横置");
+            break;
+        case UIDeviceOrientationLandscapeRight:
+            NSLog(@"屏幕向右橫置");
+            break;
+        case UIDeviceOrientationPortrait:
+            NSLog(@"屏幕直立");
+            break;
+        case UIDeviceOrientationPortraitUpsideDown:
+            NSLog(@"屏幕直立，上下顛倒");
+            break;
+        default:
+            NSLog(@"无法辨识");
+            break;
+    }
+}
+
+
+
+// 能否自动旋转
+-(BOOL)shouldAutorotate{
+    return YES;
+}
+
+// 支持的屏幕方向
+//-(UIInterfaceOrientationMask)supportedInterfaceOrientations{
+//    return UIInterfaceOrientationMaskPortrait;
+//}
+
+// 默认的屏幕方向
+-(UIInterfaceOrientation)preferredInterfaceOrientationForPresentation{
+    return UIInterfaceOrientationPortrait;
+}
+
+
 
 @end
