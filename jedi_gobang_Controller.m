@@ -86,12 +86,13 @@ jedi_gobang_view *gobangview;
     //2.1 确认按钮
     UIAlertAction *conform = [UIAlertAction actionWithTitle:@"确认" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         NSLog(@"点击了确认按钮");
+        self.view.userInteractionEnabled = NO;
         //NSLog(@"反馈的信息是：%@",alert.textFields.firstObject.text);
     }];
     //2.2 取消按钮
-    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-        NSLog(@"点击了取消按钮");
-    }];
+//    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+//        NSLog(@"点击了取消按钮");
+//    }];
     //2.3 还可以添加文本框 通过 alert.textFields.firstObject 获得该文本框
 //    [alert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
 //        textField.placeholder = @"请填写您的反馈信息";
@@ -99,7 +100,7 @@ jedi_gobang_view *gobangview;
     
     //3.将动作按钮 添加到控制器中
     [alert addAction:conform];
-    [alert addAction:cancel];
+    //[alert addAction:cancel];
     
     //4.显示弹框
     [self presentViewController:alert animated:YES completion:nil];
