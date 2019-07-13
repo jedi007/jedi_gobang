@@ -222,6 +222,7 @@ NSTimer* timer;//用于区分棋盘点单击和双击
 - (void)foundTap:(UITapGestureRecognizer *)recognizer
 {
     [timer invalidate];
+    timer = nil;
     CGPoint point = [recognizer locationInView:self];
     timer = [NSTimer scheduledTimerWithTimeInterval:0.2 repeats:NO block:^(NSTimer* timer){
         NSLog(@"timer is out");
@@ -244,6 +245,11 @@ NSTimer* timer;//用于区分棋盘点单击和双击
         NSLog(@"引发通知！！！ overkey:%d",overkey);
         if( overkey )
         {
+            Board_point* beginPoint = [[Board_point alloc] init];
+            Board_point* endPoint = [[Board_point alloc] init];
+            [self->_gboard getWinPath:bpoint beginPoint:&beginPoint endPoint:&endPoint];
+            NSLog(@"beginPoint is: %d,%d ,endPoint is : %d,%d",beginPoint.index_row,beginPoint.index_col,endPoint.index_row,endPoint.index_col);
+            
             [NSTimer scheduledTimerWithTimeInterval:0.2 repeats:NO block:^(NSTimer* timer){
                 NSString* color = overkey==1?@"黑方":@"白方";
                 //引发通知

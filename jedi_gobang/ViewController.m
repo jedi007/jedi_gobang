@@ -42,7 +42,6 @@ double gW;
 }
 
 //设备方向改变的处理
-
 - (void)handleDeviceOrientationChange:(NSNotification*)notification{
     UIDeviceOrientation deviceOrientation= [UIDevice currentDevice].orientation;
     int topheight = [self getTopHeight];

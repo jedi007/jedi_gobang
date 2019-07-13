@@ -107,6 +107,7 @@ int current_color = 1;
     return 0;
 }
 
+#pragma mark - 获取落子点得分
 - (short) get_score:(Board_point*)point
 {
     return [self get_L_R_score:point]+[self get_U_D_score:point]+[self get_LT_RD_score:point]+[self get_RT_LD_score:point];
@@ -173,6 +174,59 @@ int current_color = 1;
     }
     NSLog(@"RT_LD_index_scoretree: %d",index_scoretree);
     return scoretree[index_scoretree];
+}
+
+#pragma mark - 获取获胜五子连线
+- (void) getWinPath:(Board_point*)point beginPoint:(Board_point**)beginPoint endPoint:(Board_point**)endPoint
+{
+    current_color = current_color*-1;
+    if( [self get_L_R_score:point] == 10000 )
+    {
+        NSLog(@" win path is L_R");
+        [self get_L_R_begin_end:point beginPoint:beginPoint endPoint:endPoint];
+    }
+    else if ( [self get_U_D_score:point] == 10000 )
+    {
+        
+    }
+    else if ( [self get_LT_RD_score:point] == 10000 )
+    {
+        
+    }
+    else if ( [self get_RT_LD_score:point] == 10000 )
+    {
+        
+    }
+    current_color = current_color*-1;
+}
+
+- (void) get_L_R_begin_end:(Board_point*)point beginPoint:(Board_point**)beginPoint endPoint:(Board_point**)endPoint
+{
+    (*beginPoint).index_row = point.index_row;
+    (*beginPoint).index_col = point.index_col;
+    (*endPoint).index_row = point.index_row;
+    (*endPoint).index_col = point.index_col;
+    for(int i = point.index_row-1,j = point.index_col-2; j>=0 && j<kBoardSize; --j)
+    {
+        if( current_color == boardarray[i][j] )
+        {
+            (*beginPoint).index_row = i+1;
+            (*beginPoint).index_col = j+1;
+            NSLog(@"beginPoint change to %d,%d",i+1,j+1);
+        }
+        else
+            break;
+    }
+    for(int i = point.index_row-1,j = point.index_col; j>=0 && j<kBoardSize; ++j)
+    {
+        if( current_color == boardarray[i][j] )
+        {
+            (*endPoint).index_row = i+1;
+            (*endPoint).index_col = j+1;
+        }
+        else
+            break;
+    }
 }
 
 @end
