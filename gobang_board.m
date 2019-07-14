@@ -184,25 +184,24 @@ int current_color = 1;
     current_color = current_color*-1;
     if( [self get_L_R_score:point] == 10000 )
     {
-        NSLog(@" win path is L_R");
         [self get_L_R_begin_end:point];
     }
     else if ( [self get_U_D_score:point] == 10000 )
     {
-        
+        [self get_U_D_begin_end:point];
     }
     else if ( [self get_LT_RD_score:point] == 10000 )
     {
-        
+        [self get_LT_RD_begin_end:point];
     }
     else if ( [self get_RT_LD_score:point] == 10000 )
     {
-        
+        [self get_RT_LD_begin_end:point];
     }
     current_color = current_color*-1;
 }
 
-- (void) get_L_R_begin_end:(Board_point*)point
+- (void)get_L_R_begin_end:(Board_point*)point
 {
     _beginPoint.index_row = point.index_row;
     _beginPoint.index_col = point.index_col;
@@ -214,7 +213,6 @@ int current_color = 1;
         {
             _beginPoint.index_row = i+1;
             _beginPoint.index_col = j+1;
-            NSLog(@"beginPoint change to %d,%d",i+1,j+1);
         }
         else
             break;
@@ -225,11 +223,93 @@ int current_color = 1;
         {
             _endPoint.index_row = i+1;
             _endPoint.index_col = j+1;
-            NSLog(@"endPoint change to %d,%d",i+1,j+1);
         }
         else
             break;
     }
 }
 
+- (void)get_U_D_begin_end:(Board_point*)point
+{
+    _beginPoint.index_row = point.index_row;
+    _beginPoint.index_col = point.index_col;
+    _endPoint.index_row = point.index_row;
+    _endPoint.index_col = point.index_col;
+    for(int i = point.index_row-2,j = point.index_col-1; i>=0 && i<kBoardSize; --i)
+    {
+        if( current_color == boardarray[i][j] )
+        {
+            _beginPoint.index_row = i+1;
+            _beginPoint.index_col = j+1;
+        }
+        else
+            break;
+    }
+    for(int i = point.index_row,j = point.index_col-1; i>=0 && i<kBoardSize; ++i)
+    {
+        if( current_color == boardarray[i][j] )
+        {
+            _endPoint.index_row = i+1;
+            _endPoint.index_col = j+1;
+        }
+        else
+            break;
+    }
+}
+
+- (void)get_LT_RD_begin_end:(Board_point*)point
+{
+    _beginPoint.index_row = point.index_row;
+    _beginPoint.index_col = point.index_col;
+    _endPoint.index_row = point.index_row;
+    _endPoint.index_col = point.index_col;
+    for(int i = point.index_row-2,j = point.index_col-2; i>=0 && i<kBoardSize && j>=0 && j<kBoardSize; --i,--j)
+    {
+        if( current_color == boardarray[i][j] )
+        {
+            _beginPoint.index_row = i+1;
+            _beginPoint.index_col = j+1;
+        }
+        else
+            break;
+    }
+    for(int i = point.index_row,j = point.index_col; i>=0 && i<kBoardSize && i>=0 && i<kBoardSize; ++i,++j)
+    {
+        if( current_color == boardarray[i][j] )
+        {
+            _endPoint.index_row = i+1;
+            _endPoint.index_col = j+1;
+        }
+        else
+            break;
+    }
+}
+
+- (void)get_RT_LD_begin_end:(Board_point*)point
+{
+    _beginPoint.index_row = point.index_row;
+    _beginPoint.index_col = point.index_col;
+    _endPoint.index_row = point.index_row;
+    _endPoint.index_col = point.index_col;
+    for(int i = point.index_row-2,j = point.index_col; i>=0 && i<kBoardSize && j>=0 && j<kBoardSize; --i,++j)
+    {
+        if( current_color == boardarray[i][j] )
+        {
+            _beginPoint.index_row = i+1;
+            _beginPoint.index_col = j+1;
+        }
+        else
+            break;
+    }
+    for(int i = point.index_row,j = point.index_col-2; i>=0 && i<kBoardSize && i>=0 && i<kBoardSize; ++i,--j)
+    {
+        if( current_color == boardarray[i][j] )
+        {
+            _endPoint.index_row = i+1;
+            _endPoint.index_col = j+1;
+        }
+        else
+            break;
+    }
+}
 @end
