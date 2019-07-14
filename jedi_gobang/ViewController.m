@@ -53,6 +53,7 @@ double gH;
 - (void)AgainClicked
 {
     NSLog(@"again clicked receive in main viewController");
+    [gobang_controller Restart];
 }
 
 //设备方向改变的处理

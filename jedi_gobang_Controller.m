@@ -116,4 +116,15 @@ jedi_gobang_view *gobangview;
 }
 */
 
+- (void)Restart
+{
+    CGRect frame = self.view.frame;
+    gobangview = nil;
+    gobangview = [[jedi_gobang_view alloc] init];
+    [self.view addSubview:gobangview];
+    [self setViewFrame:frame];
+    
+    self.view.userInteractionEnabled = YES;
+}
+
 @end

@@ -33,12 +33,12 @@
 
 NSTimer* timer;//用于区分棋盘点单击和双击
 
-
 - (void)setFrameForReSet:(CGRect)frame
 {
     _lastfram = _ofram = self.frame = frame;
     [self initruntimeinfo];
     
+    _gboard = nil;
     _gboard = [[gobang_board alloc] init];
     
     _lastcenter = _ocenter = self.center;
