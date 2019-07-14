@@ -8,8 +8,6 @@
 
 #import "jedi_gobang_view.h"
 
-#import "modules/UIColor+Expanded.h"
-
 @interface jedi_gobang_view()
 
 @property (nonatomic, readwrite) double fW;

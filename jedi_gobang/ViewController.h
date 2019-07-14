@@ -8,7 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UIViewController
+
+#import "../settingView.h"
+
+@interface ViewController : UIViewController<settingViewDelegate>
 
 
 

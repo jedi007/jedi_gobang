@@ -13,14 +13,17 @@
 @implementation ViewController
 
 jedi_gobang_Controller* gobang_controller;
+settingView* SettingView;
 
 double gW;
+double gH;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
     
     gW = [[UIScreen mainScreen] bounds].size.width;
+    gH = [[UIScreen mainScreen] bounds].size.height;
     
     //获取状态栏的rect
     CGRect statusRect = [[UIApplication sharedApplication] statusBarFrame];
@@ -30,15 +33,26 @@ double gW;
     int topheight = statusRect.size.height+navRect.size.height;
     NSLog(@"topheight : %d",topheight);
     
-    gobang_controller = [[jedi_gobang_Controller alloc] initWithViewFrame:CGRectMake(gW*0.025, gW*0.025+topheight, gW*0.95, gW*0.95)];
+    CGRect gbangFrame = CGRectMake(gW*0.025, gW*0.025+topheight, gW*0.95, gW*0.95);
+    gobang_controller = [[jedi_gobang_Controller alloc] initWithViewFrame:gbangFrame];
     //[gobang_controller setViewFrame:CGRectMake(0, gW*0.95+10, 200, 200)];
     [self.view addSubview:gobang_controller.view];
+    
+    SettingView = [[settingView alloc] init];
+    SettingView.frame = CGRectMake(gbangFrame.origin.x, gbangFrame.origin.y+gbangFrame.size.height+10, gbangFrame.size.width, gH-(gbangFrame.origin.y+gbangFrame.size.height+20));
+    SettingView.delegate = self;
+    [self.view addSubview:SettingView];
     
     if(![UIDevice currentDevice].generatesDeviceOrientationNotifications){
         [[UIDevice currentDevice]beginGeneratingDeviceOrientationNotifications];
     }
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleDeviceOrientationChange:) name:UIDeviceOrientationDidChangeNotification object:nil];
+}
+
+- (void)AgainClicked
+{
+    NSLog(@"again clicked receive in main viewController");
 }
 
 //设备方向改变的处理
