@@ -59,19 +59,23 @@
 @implementation gobang_board
 
 int boardarray[15][15];
-int current_color = 1;
+int current_color;
 
 - (id) init
 {
     self = [super init];
-    for(int i=0;i<15;++i)
+    if(self)
     {
-        for(int j=0;j<15;++j)
+        current_color = 1;
+        for(int i=0;i<15;++i)
         {
-            boardarray[i][j] = 0;
-            _beginPoint = [[Board_point alloc] init];
-            _endPoint = [[Board_point alloc] init];
-            _lastPoint = [[Board_point alloc] init];
+            for(int j=0;j<15;++j)
+            {
+                boardarray[i][j] = 0;
+                _beginPoint = [[Board_point alloc] init];
+                _endPoint = [[Board_point alloc] init];
+                _lastPoint = [[Board_point alloc] init];
+            }
         }
     }
     return self;
