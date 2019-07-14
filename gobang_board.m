@@ -69,6 +69,8 @@ int current_color = 1;
         for(int j=0;j<15;++j)
         {
             boardarray[i][j] = 0;
+            _beginPoint = [[Board_point alloc] init];
+            _endPoint = [[Board_point alloc] init];
         }
     }
     return self;
@@ -177,13 +179,13 @@ int current_color = 1;
 }
 
 #pragma mark - 获取获胜五子连线
-- (void) getWinPath:(Board_point*)point beginPoint:(Board_point**)beginPoint endPoint:(Board_point**)endPoint
+- (void) getWinPath:(Board_point*)point
 {
     current_color = current_color*-1;
     if( [self get_L_R_score:point] == 10000 )
     {
         NSLog(@" win path is L_R");
-        [self get_L_R_begin_end:point beginPoint:beginPoint endPoint:endPoint];
+        [self get_L_R_begin_end:point];
     }
     else if ( [self get_U_D_score:point] == 10000 )
     {
@@ -200,18 +202,18 @@ int current_color = 1;
     current_color = current_color*-1;
 }
 
-- (void) get_L_R_begin_end:(Board_point*)point beginPoint:(Board_point**)beginPoint endPoint:(Board_point**)endPoint
+- (void) get_L_R_begin_end:(Board_point*)point
 {
-    (*beginPoint).index_row = point.index_row;
-    (*beginPoint).index_col = point.index_col;
-    (*endPoint).index_row = point.index_row;
-    (*endPoint).index_col = point.index_col;
+    _beginPoint.index_row = point.index_row;
+    _beginPoint.index_col = point.index_col;
+    _endPoint.index_row = point.index_row;
+    _endPoint.index_col = point.index_col;
     for(int i = point.index_row-1,j = point.index_col-2; j>=0 && j<kBoardSize; --j)
     {
         if( current_color == boardarray[i][j] )
         {
-            (*beginPoint).index_row = i+1;
-            (*beginPoint).index_col = j+1;
+            _beginPoint.index_row = i+1;
+            _beginPoint.index_col = j+1;
             NSLog(@"beginPoint change to %d,%d",i+1,j+1);
         }
         else
@@ -221,8 +223,9 @@ int current_color = 1;
     {
         if( current_color == boardarray[i][j] )
         {
-            (*endPoint).index_row = i+1;
-            (*endPoint).index_col = j+1;
+            _endPoint.index_row = i+1;
+            _endPoint.index_col = j+1;
+            NSLog(@"endPoint change to %d,%d",i+1,j+1);
         }
         else
             break;

@@ -8,6 +8,8 @@
 
 #import "jedi_gobang_view.h"
 
+#import "modules/UIColor+Expanded.h"
+
 @interface jedi_gobang_view()
 
 @property (nonatomic, readwrite) double fW;
@@ -32,6 +34,7 @@
 @implementation jedi_gobang_view
 
 NSTimer* timer;//用于区分棋盘点单击和双击
+
 
 - (void)setFrameForReSet:(CGRect)frame
 {
@@ -113,6 +116,25 @@ NSTimer* timer;//用于区分棋盘点单击和双击
             }
         }
     }
+    
+    [self drawWinLine:context];
+}
+
+- (void)drawWinLine:(CGContextRef)context
+{
+    if( _gboard.beginPoint.index_row >=0 )
+    {
+        //画五子连珠时的标线
+        NSLog(@"画五子连珠时的标线");
+        CGContextSetRGBStrokeColor(context, 0, 191.0/255.0, 1, 1.0);
+        //设置线条粗细
+        CGContextSetLineWidth(context, 4.0);
+        NSLog(@"beginPoint is: %d,%d ,endPoint is : %d,%d",self->_gboard.beginPoint.index_row,self->_gboard.beginPoint.index_col,self->_gboard.endPoint.index_row,self->_gboard.endPoint.index_col);
+        CGPoint first = CGPointMake(_gboard.beginPoint.index_col*_cellW, _gboard.beginPoint.index_row*_cellH);
+        CGPoint second = CGPointMake(_gboard.endPoint.index_col*_cellW, _gboard.endPoint.index_row*_cellH);
+        [self drawline:context firstPoint:first secondPoint:second];
+        CGContextStrokePath(context);
+    }
 }
 
 - (void)initboard:(CGContextRef)context {
@@ -141,6 +163,7 @@ NSTimer* timer;//用于区分棋盘点单击和双击
             CGContextAddEllipseInRect(context, frame);
         }
     }
+    
     CGContextFillPath(context);
 }
 
@@ -245,10 +268,9 @@ NSTimer* timer;//用于区分棋盘点单击和双击
         NSLog(@"引发通知！！！ overkey:%d",overkey);
         if( overkey )
         {
-            Board_point* beginPoint = [[Board_point alloc] init];
-            Board_point* endPoint = [[Board_point alloc] init];
-            [self->_gboard getWinPath:bpoint beginPoint:&beginPoint endPoint:&endPoint];
-            NSLog(@"beginPoint is: %d,%d ,endPoint is : %d,%d",beginPoint.index_row,beginPoint.index_col,endPoint.index_row,endPoint.index_col);
+            [self->_gboard getWinPath:bpoint];
+            NSLog(@"beginPoint is: %d,%d ,endPoint is : %d,%d",self->_gboard.beginPoint.index_row,self->_gboard.beginPoint.index_col,self->_gboard.endPoint.index_row,self->_gboard.endPoint.index_col);
+            [self setNeedsDisplay];
             
             [NSTimer scheduledTimerWithTimeInterval:0.2 repeats:NO block:^(NSTimer* timer){
                 NSString* color = overkey==1?@"黑方":@"白方";
