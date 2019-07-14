@@ -26,6 +26,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, readwrite) Board_point* beginPoint;
 @property (nonatomic, readwrite) Board_point* endPoint;
+@property (nonatomic, readwrite) Board_point* lastPoint;
 
 - (bool)add_chess:(Board_point*)point;
 - (int) get_chess_color:(int)x y:(int)y;

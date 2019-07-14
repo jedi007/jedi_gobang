@@ -116,7 +116,7 @@ NSTimer* timer;//用于区分棋盘点单击和双击
             }
         }
     }
-    
+    [self drawLastChess:context];
     [self drawWinLine:context];
 }
 
@@ -185,6 +185,15 @@ NSTimer* timer;//用于区分棋盘点单击和双击
             [[UIColor whiteColor] set];
         CGContextFillPath(context);
     }
+}
+
+- (void)drawLastChess:(CGContextRef)context
+{
+    CGContextSetRGBStrokeColor(context, 0, 191.0/255.0, 1, 1.0);
+    CGContextSetLineWidth(context, 2.0);
+    CGRect frame = CGRectMake(_cellW*( _gboard.lastPoint.index_col-0.4), _cellH*(_gboard.lastPoint.index_row-0.4), _cellW*0.8, _cellH*0.8);
+    CGContextAddEllipseInRect(context, frame);
+    CGContextStrokePath(context);
 }
 
 - (void)foundPinch:(UIPinchGestureRecognizer *)recognizer

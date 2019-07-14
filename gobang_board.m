@@ -71,6 +71,7 @@ int current_color = 1;
             boardarray[i][j] = 0;
             _beginPoint = [[Board_point alloc] init];
             _endPoint = [[Board_point alloc] init];
+            _lastPoint = [[Board_point alloc] init];
         }
     }
     return self;
@@ -83,6 +84,8 @@ int current_color = 1;
         boardarray[point.index_row-1][point.index_col-1] = current_color;
         [self isOver:point];
         current_color = -1*current_color;
+        
+        _lastPoint = point;
         return true;
     }
     return false;
