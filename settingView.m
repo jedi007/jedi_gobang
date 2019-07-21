@@ -37,6 +37,17 @@
         btnAgain.layer.borderColor = [UIColor blackColor].CGColor;//设置边框颜色
         btnAgain.layer.borderWidth = 1.0f;//设置边框颜色
         [self addSubview:btnAgain];
+        
+        UIButton *btnPreStep = [UIButton buttonWithType:UIButtonTypeCustom];
+        btnPreStep.frame = CGRectMake(10, 70, 100, 50);
+        [btnPreStep setTitle:@"悔棋" forState:UIControlStateNormal];
+        btnPreStep.backgroundColor = [UIColor hexStringToColor:@"D8BFD8"];
+        [btnPreStep addTarget:self action:@selector(btnPreStepClicked) forControlEvents:UIControlEventTouchUpInside];
+        //关键语句
+        btnPreStep.layer.cornerRadius = 8.0;//2.0是圆角的弧度，根据需求自己更改
+        btnPreStep.layer.borderColor = [UIColor blackColor].CGColor;//设置边框颜色
+        btnPreStep.layer.borderWidth = 1.0f;//设置边框颜色
+        [self addSubview:btnPreStep];
     }
     return self;
 }
@@ -47,6 +58,15 @@
     if(_delegate)
     {
         [_delegate AgainClicked];
+    }
+}
+
+-(void)btnPreStepClicked
+{
+    NSLog(@"btnPreStepClicked ");
+    if(_delegate)
+    {
+        [_delegate PreStepClicked];
     }
 }
 

@@ -127,4 +127,10 @@ jedi_gobang_view *gobangview;
     self.view.userInteractionEnabled = YES;
 }
 
+- (void)PreStep
+{
+    NSLog(@"jedi_gobang_controller receive preStep");
+    [gobangview.bRecord preStep];
+    [gobangview setNeedsDisplay];
+}
 @end

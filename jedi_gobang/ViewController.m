@@ -56,6 +56,13 @@ double gH;
     [gobang_controller Restart];
 }
 
+- (void)PreStepClicked
+{
+     NSLog(@"PreStepClicked receive in main viewController");
+    [gobang_controller PreStep];
+    
+}
+
 //设备方向改变的处理
 - (void)handleDeviceOrientationChange:(NSNotification*)notification{
     UIDeviceOrientation deviceOrientation= [UIDevice currentDevice].orientation;

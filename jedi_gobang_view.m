@@ -41,6 +41,8 @@ NSTimer* timer;//用于区分棋盘点单击和双击
     _gboard = nil;
     _gboard = [[gobang_board alloc] init];
     
+    _bRecord = [[boardRecord alloc] init];
+    
     _lastcenter = _ocenter = self.center;
     _lastscale = 1;
     
@@ -173,7 +175,8 @@ NSTimer* timer;//用于区分棋盘点单击和双击
 
 - (void)drawchess:(CGContextRef)context chess_point:(Board_point *)point color:(int)color
 {
-    if( ![point isNULL] )
+    NSLog(@"point is: %d",[[[_bRecord.boardArray objectAtIndex:point.index_row-1] objectAtIndex:point.index_col-1] intValue]);
+    if( ![point isNULL] && [[[_bRecord.boardArray objectAtIndex:point.index_row-1] objectAtIndex:point.index_col-1] intValue] != 0)
     {
         CGRect frame = CGRectMake(_cellW*(point.index_col-0.4), _cellH*(point.index_row-0.4), _cellW*0.8, _cellH*0.8);
         CGContextAddEllipseInRect(context, frame);
@@ -267,6 +270,8 @@ NSTimer* timer;//用于区分棋盘点单击和双击
         
         if( [self->_gboard add_chess:bpoint] )
         {
+            NSLog(@"addchess success in fundTap");
+            [self->_bRecord addChess:bpoint.index_row-1 col:bpoint.index_col-1];
             self->_lastfram = self.frame = self->_ofram;
             [self initruntimeinfo];
             [self setNeedsDisplay];

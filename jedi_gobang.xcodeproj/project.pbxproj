@@ -20,6 +20,7 @@
 		8BD42DF122AF985E00E0D395 /* gobang_board.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BD42DF022AF985E00E0D395 /* gobang_board.m */; };
 		CD7AB08022DAC4AC0084C153 /* UIColor+Expanded.m in Sources */ = {isa = PBXBuildFile; fileRef = CD7AB07E22DAC4AC0084C153 /* UIColor+Expanded.m */; };
 		CD7AB08322DB01500084C153 /* settingView.m in Sources */ = {isa = PBXBuildFile; fileRef = CD7AB08222DB01500084C153 /* settingView.m */; };
+		CDCB5D2D22E43FD0009649A7 /* boardRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = CDCB5D2C22E43FD0009649A7 /* boardRecord.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -47,6 +48,8 @@
 		CD7AB07F22DAC4AC0084C153 /* UIColor+Expanded.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Expanded.h"; sourceTree = "<group>"; };
 		CD7AB08122DB01500084C153 /* settingView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = settingView.h; sourceTree = "<group>"; };
 		CD7AB08222DB01500084C153 /* settingView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = settingView.m; sourceTree = "<group>"; };
+		CDCB5D2B22E43FD0009649A7 /* boardRecord.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = boardRecord.h; sourceTree = "<group>"; };
+		CDCB5D2C22E43FD0009649A7 /* boardRecord.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = boardRecord.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,6 +110,8 @@
 				8B51ECF222C793DE0000C282 /* jedi_gobang_Controller.m */,
 				CD7AB08122DB01500084C153 /* settingView.h */,
 				CD7AB08222DB01500084C153 /* settingView.m */,
+				CDCB5D2B22E43FD0009649A7 /* boardRecord.h */,
+				CDCB5D2C22E43FD0009649A7 /* boardRecord.m */,
 			);
 			name = jedi_gobang_core;
 			sourceTree = "<group>";
@@ -196,6 +201,7 @@
 				8BD42DF122AF985E00E0D395 /* gobang_board.m in Sources */,
 				7CD1EFE9226D860100D85AB5 /* jedi_gobang_view.m in Sources */,
 				8BBD6DA222B2432D0032C84D /* NSString+Reverse.m in Sources */,
+				CDCB5D2D22E43FD0009649A7 /* boardRecord.m in Sources */,
 				7CD1EFD2226D855600D85AB5 /* ViewController.m in Sources */,
 				CD7AB08322DB01500084C153 /* settingView.m in Sources */,
 				7CD1EFDD226D855800D85AB5 /* main.m in Sources */,

@@ -67,9 +67,9 @@ int current_color;
     if(self)
     {
         current_color = 1;
-        for(int i=0;i<15;++i)
+        for(int i=0;i<kBoardSize;++i)
         {
-            for(int j=0;j<15;++j)
+            for(int j=0;j<kBoardSize;++j)
             {
                 boardarray[i][j] = 0;
                 _beginPoint = [[Board_point alloc] init];

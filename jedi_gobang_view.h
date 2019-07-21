@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 
 #import "gobang_board.h"
+#import "boardRecord.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -17,6 +18,8 @@ IB_DESIGNABLE
 @interface jedi_gobang_view : UIView
 
 - (void)setFrameForReSet:(CGRect)frame;
+
+@property (nonatomic, readwrite) boardRecord* bRecord;
 
 @end
 

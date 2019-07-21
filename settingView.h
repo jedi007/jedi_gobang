@@ -12,15 +12,17 @@ NS_ASSUME_NONNULL_BEGIN
 
 // 声明一个协议
 @protocol settingViewDelegate
-// 协议中的方法
+
+@required
 - (void)AgainClicked;
+- (void)PreStepClicked;
 
 @end
 
 @interface settingView : UIView
 
 // 采用上面协议的物件
-@property (weak) id delegate;
+@property (weak) id<settingViewDelegate> delegate;
 
 @end
 

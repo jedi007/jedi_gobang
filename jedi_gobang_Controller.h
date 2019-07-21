@@ -15,6 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (id)initWithViewFrame:(CGRect)frame;
 - (void)setViewFrame:(CGRect) frame;
+- (void)PreStep;
 
 -(void)showAlertViewTitle:(NSString *)title subTitle:(NSString *)subTitle;
 - (void)Restart;
