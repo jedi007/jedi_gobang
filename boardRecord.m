@@ -10,6 +10,8 @@
 
 @implementation boardRecord
 
+@synthesize lastPoint = _lastPoint;
+
 NSInteger lastStepIndex;
 
 - (instancetype)init
@@ -17,6 +19,7 @@ NSInteger lastStepIndex;
     self = [super init];
     if (self) {
         _boardArray = [[NSMutableArray alloc]initWithCapacity:kBoardSize];
+        _lastPoint = [[Board_point alloc] init];
         lastStepIndex = 0;
         for (int i=0; i<kBoardSize; ++i) {
             NSMutableArray* rowArray = [[NSMutableArray alloc]initWithCapacity:kBoardSize];
@@ -54,4 +57,25 @@ NSInteger lastStepIndex;
         }
     }
 }
+
+- (Board_point*)lastPoint
+{
+    NSLog(@"getlastPoint is called");
+    if(lastStepIndex>0)
+    {
+        for (int i=0; i<kBoardSize; ++i) {
+            for (int j=0; j<kBoardSize; ++j) {
+                if( [[[_boardArray objectAtIndex:i] objectAtIndex:j] integerValue] == lastStepIndex)
+                {
+                    _lastPoint.index_row = i+1;
+                    _lastPoint.index_col = j+1;
+                }
+            }
+        }
+    }
+    else
+        return nil;
+    return _lastPoint;
+}
+
 @end

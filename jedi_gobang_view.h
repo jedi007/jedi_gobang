@@ -18,8 +18,7 @@ IB_DESIGNABLE
 @interface jedi_gobang_view : UIView
 
 - (void)setFrameForReSet:(CGRect)frame;
-
-@property (nonatomic, readwrite) boardRecord* bRecord;
+- (void)preStep;
 
 @end
 

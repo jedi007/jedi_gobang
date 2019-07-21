@@ -26,6 +26,7 @@
 @property (nonatomic, readwrite) double lastscale;
 
 @property (nonatomic, readwrite) gobang_board* gboard;
+@property (nonatomic, readwrite) boardRecord* bRecord;
 
 @end
 
@@ -116,7 +117,7 @@ NSTimer* timer;//用于区分棋盘点单击和双击
             }
         }
     }
-    [self drawLastChess:context];
+    [self drawLastChess:context lastPoint:_bRecord.lastPoint ];
     [self drawWinLine:context];
 }
 
@@ -175,8 +176,7 @@ NSTimer* timer;//用于区分棋盘点单击和双击
 
 - (void)drawchess:(CGContextRef)context chess_point:(Board_point *)point color:(int)color
 {
-    NSLog(@"point is: %d",[[[_bRecord.boardArray objectAtIndex:point.index_row-1] objectAtIndex:point.index_col-1] intValue]);
-    if( ![point isNULL] && [[[_bRecord.boardArray objectAtIndex:point.index_row-1] objectAtIndex:point.index_col-1] intValue] != 0)
+    if( ![point isNULL])
     {
         CGRect frame = CGRectMake(_cellW*(point.index_col-0.4), _cellH*(point.index_row-0.4), _cellW*0.8, _cellH*0.8);
         CGContextAddEllipseInRect(context, frame);
@@ -188,13 +188,16 @@ NSTimer* timer;//用于区分棋盘点单击和双击
     }
 }
 
-- (void)drawLastChess:(CGContextRef)context
+- (void)drawLastChess:(CGContextRef)context lastPoint:(Board_point*) lastPoint
 {
-    CGContextSetRGBStrokeColor(context, 0, 191.0/255.0, 1, 1.0);
-    CGContextSetLineWidth(context, 2.0);
-    CGRect frame = CGRectMake(_cellW*( _gboard.lastPoint.index_col-0.4), _cellH*(_gboard.lastPoint.index_row-0.4), _cellW*0.8, _cellH*0.8);
-    CGContextAddEllipseInRect(context, frame);
-    CGContextStrokePath(context);
+    if( lastPoint != nil )
+    {
+        CGContextSetRGBStrokeColor(context, 0, 191.0/255.0, 1, 1.0);
+        CGContextSetLineWidth(context, 2.0);
+        CGRect frame = CGRectMake(_cellW*( lastPoint.index_col-0.4), _cellH*( lastPoint.index_row-0.4), _cellW*0.8, _cellH*0.8);
+        CGContextAddEllipseInRect(context, frame);
+        CGContextStrokePath(context);
+    }
 }
 
 - (void)foundPinch:(UIPinchGestureRecognizer *)recognizer
@@ -376,6 +379,14 @@ NSTimer* timer;//用于区分棋盘点单击和双击
     _lastcenter =  self.center;
     _lastfram = self.frame;
     _lastscale = 1;
+}
+
+- (void)preStep
+{
+    [_gboard remove_chess:_bRecord.lastPoint];
+    [_bRecord preStep];
+    
+    [self setNeedsDisplay];
 }
 
 @end

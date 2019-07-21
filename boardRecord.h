@@ -18,6 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)preStep;
 
 @property (nonatomic, readwrite) NSMutableArray *boardArray;
+@property (nonatomic, readwrite) Board_point* lastPoint;
 
 @end
 

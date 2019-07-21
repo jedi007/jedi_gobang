@@ -74,7 +74,6 @@ int current_color;
                 boardarray[i][j] = 0;
                 _beginPoint = [[Board_point alloc] init];
                 _endPoint = [[Board_point alloc] init];
-                _lastPoint = [[Board_point alloc] init];
             }
         }
     }
@@ -88,11 +87,17 @@ int current_color;
         boardarray[point.index_row-1][point.index_col-1] = current_color;
         [self isOver:point];
         current_color = -1*current_color;
-        
-        _lastPoint = point;
         return true;
     }
     return false;
+}
+
+- (void)remove_chess:(Board_point*)point
+{
+    if(![point isNULL])
+    {
+        boardarray[point.index_row-1][point.index_col-1] = 0;
+    }
 }
 
 -(int)get_chess_color:(int)x y:(int)y

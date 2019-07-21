@@ -130,7 +130,6 @@ jedi_gobang_view *gobangview;
 - (void)PreStep
 {
     NSLog(@"jedi_gobang_controller receive preStep");
-    [gobangview.bRecord preStep];
-    [gobangview setNeedsDisplay];
+    [gobangview preStep];
 }
 @end
