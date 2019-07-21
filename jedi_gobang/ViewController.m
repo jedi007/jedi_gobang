@@ -60,6 +60,7 @@ double gH;
 - (void)handleDeviceOrientationChange:(NSNotification*)notification{
     UIDeviceOrientation deviceOrientation= [UIDevice currentDevice].orientation;
     int topheight = [self getTopHeight];
+    CGRect gbangFrame;
     switch(deviceOrientation){
             
         case UIDeviceOrientationFaceUp:
@@ -74,16 +75,22 @@ double gH;
         case UIDeviceOrientationLandscapeLeft:
             NSLog(@"屏幕向左横置");
             NSLog(@"topheight : %d",topheight);
-            gobang_controller.view.frame = CGRectMake(gW*0.025, gW*0.025+topheight, gW*0.95, gW*0.95);
+            gbangFrame = CGRectMake(gW*0.025, gW*0.025+topheight, gW*0.95, gW*0.95);
+            gobang_controller.view.frame = gbangFrame;
+            SettingView.frame = CGRectMake(gbangFrame.origin.x+gbangFrame.size.width+10, gbangFrame.origin.y, gH-(gbangFrame.origin.x+gbangFrame.size.width+20), gbangFrame.size.height);
             break;
         case UIDeviceOrientationLandscapeRight:
             NSLog(@"屏幕向右橫置");
             NSLog(@"topheight : %d",topheight);
-            gobang_controller.view.frame = CGRectMake(gW*0.025, gW*0.025+topheight, gW*0.95, gW*0.95);
+            gbangFrame = CGRectMake(gW*0.025, gW*0.025+topheight, gW*0.95, gW*0.95);
+            gobang_controller.view.frame = gbangFrame;
+            SettingView.frame = CGRectMake(gbangFrame.origin.x+gbangFrame.size.width+10, gbangFrame.origin.y, gH-(gbangFrame.origin.x+gbangFrame.size.width+20), gbangFrame.size.height);
             break;
         case UIDeviceOrientationPortrait:
             NSLog(@"屏幕直立");
-            gobang_controller.view.frame = CGRectMake(gW*0.025, gW*0.025+topheight, gW*0.95, gW*0.95);
+            gbangFrame = CGRectMake(gW*0.025, gW*0.025+topheight, gW*0.95, gW*0.95);
+            gobang_controller.view.frame = gbangFrame;
+            SettingView.frame = CGRectMake(gbangFrame.origin.x, gbangFrame.origin.y+gbangFrame.size.height+10, gbangFrame.size.width, gH-(gbangFrame.origin.y+gbangFrame.size.height+20));
             break;
         case UIDeviceOrientationPortraitUpsideDown:
             NSLog(@"屏幕直立，上下顛倒");
