@@ -33,9 +33,9 @@
         btnAgain.backgroundColor = [UIColor hexStringToColor:@"D8BFD8"];
         [btnAgain addTarget:self action:@selector(btnAgainClicked) forControlEvents:UIControlEventTouchUpInside];
         //关键语句
-        btnAgain.layer.cornerRadius = 8.0;//2.0是圆角的弧度，根据需求自己更改
+        btnAgain.layer.cornerRadius = 8.0;
         btnAgain.layer.borderColor = [UIColor blackColor].CGColor;//设置边框颜色
-        btnAgain.layer.borderWidth = 1.0f;//设置边框颜色
+        btnAgain.layer.borderWidth = 1.0f;
         [self addSubview:btnAgain];
         
         UIButton *btnPreStep = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -44,9 +44,9 @@
         btnPreStep.backgroundColor = [UIColor hexStringToColor:@"D8BFD8"];
         [btnPreStep addTarget:self action:@selector(btnPreStepClicked) forControlEvents:UIControlEventTouchUpInside];
         //关键语句
-        btnPreStep.layer.cornerRadius = 8.0;//2.0是圆角的弧度，根据需求自己更改
+        btnPreStep.layer.cornerRadius = 8.0;
         btnPreStep.layer.borderColor = [UIColor blackColor].CGColor;//设置边框颜色
-        btnPreStep.layer.borderWidth = 1.0f;//设置边框颜色
+        btnPreStep.layer.borderWidth = 1.0f;
         [self addSubview:btnPreStep];
     }
     return self;

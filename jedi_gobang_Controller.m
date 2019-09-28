@@ -18,15 +18,19 @@ jedi_gobang_view *gobangview;
 
 - (id)initWithViewFrame:(CGRect)frame
 {
+    NSLog(@"initWithViewFrame is called");
     self = [super init];
+    NSLog(@"initWithViewFrame is called over 1");
     if (self)
     {
         [self setViewFrame:frame];
     }
+    NSLog(@"initWithViewFrame is called over 2");
     return self;
 }
 
 - (void)viewDidLoad {
+    NSLog(@"jedi_gobang_view  viewDidLoad is called");
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
@@ -39,7 +43,10 @@ jedi_gobang_view *gobangview;
 
 - (void)setViewFrame:(CGRect) frame
 {
-    self.view.frame = frame;
+    NSLog(@"1   jedi_gobang_Controller is : %@",gobangview);
+    self.view.frame = frame;//通过测试知道，在这一步会触发viewDidLoad
+    
+    NSLog(@"2   jedi_gobang_Controller is : %@",gobangview);
     [gobangview setFrameForReSet:CGRectMake(0, 0, frame.size.width, frame.size.height)];
     //gobangview.frame = CGRectMake(0, 0, frame.size.width, frame.size.height);
     
