@@ -43,6 +43,7 @@ double gH;
     SettingView.delegate = self;
     [self.view addSubview:SettingView];
     
+    // 判断是否开启通知，默认应该是打开的
     if(![UIDevice currentDevice].generatesDeviceOrientationNotifications){
         [[UIDevice currentDevice]beginGeneratingDeviceOrientationNotifications];
     }

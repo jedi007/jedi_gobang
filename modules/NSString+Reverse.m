@@ -8,13 +8,13 @@
 
 #import "NSString+Reverse.h"
 
-#import "NSString+Reverse.h"
+
 @implementation NSString (Reverse)
 - (NSString *)stringByReversed
 {
     NSMutableString *s = [NSMutableString string];
-    for (NSUInteger i=self.length; i>0; i--) {
-        [s appendString:[self substringWithRange:NSMakeRange(i-1, 1)]];
+    for (NSUInteger i=self.length-1; i>0; i--) {
+        [s appendString:[self substringWithRange:NSMakeRange(i, 1)]];
     }
     return s;
 }
