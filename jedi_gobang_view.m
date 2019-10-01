@@ -268,29 +268,15 @@ NSTimer* timer;//用于区分棋盘点单击和双击
         Board_point *bpoint = [self getbPoint:point];
         NSLog(@"found tap bPoint ---- row:%ld  col:%ld",(long)bpoint.index_row,(long)bpoint.index_col);
         
-        int overkey = [self->_gboard isOver:bpoint];
-        
         [self add_chess:bpoint];
-        
-        NSLog(@"引发通知！！！ overkey:%d",overkey);
-        if( overkey )
-        {
-            [self->_gboard getWinPath:bpoint];
-            NSLog(@"beginPoint is: %d,%d ,endPoint is : %d,%d",self->_gboard.beginPoint.index_row,self->_gboard.beginPoint.index_col,self->_gboard.endPoint.index_row,self->_gboard.endPoint.index_col);
-            [self setNeedsDisplay];
-            
-            [NSTimer scheduledTimerWithTimeInterval:0.2 repeats:NO block:^(NSTimer* timer){
-                NSString* color = overkey==1?@"黑方":@"白方";
-                //引发通知
-                [[NSNotificationCenter defaultCenter] postNotificationName:@"AlertWinner" object:color];
-            }];
-        }
     }];
     [[NSRunLoop currentRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
 }
 
 - (void)add_chess:(Board_point *)bpoint
 {
+    int overkey = [self->_gboard isOver:bpoint];
+    
     if( [self->_gboard add_chess:bpoint] )
     {
         NSLog(@"addchess success in fundTap");
@@ -298,6 +284,20 @@ NSTimer* timer;//用于区分棋盘点单击和双击
         self->_lastfram = self.frame = self->_ofram;
         [self initruntimeinfo];
         [self setNeedsDisplay];
+    }
+    
+    NSLog(@"引发通知！！！ overkey:%d",overkey);
+    if( overkey )
+    {
+        [self->_gboard getWinPath:bpoint];
+        NSLog(@"beginPoint is: %d,%d ,endPoint is : %d,%d",self->_gboard.beginPoint.index_row,self->_gboard.beginPoint.index_col,self->_gboard.endPoint.index_row,self->_gboard.endPoint.index_col);
+        [self setNeedsDisplay];
+        
+        [NSTimer scheduledTimerWithTimeInterval:0.2 repeats:NO block:^(NSTimer* timer){
+            NSString* color = overkey==1?@"黑方":@"白方";
+            //引发通知
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"AlertWinner" object:color];
+        }];
     }
 }
 
