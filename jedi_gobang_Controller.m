@@ -143,5 +143,7 @@ jedi_gobang_view *gobangview;
 - (void)AIAction
 {
     NSLog(@"jedi_gobang_controller receive AIAction");
+    
+    [gobangview.gboard getBestPoint];
 }
 @end

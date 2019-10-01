@@ -10,11 +10,13 @@
 
 #import "gobang_board.h"
 
+typedef int intsptr[15][15];
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface AIAction : NSObject
 
-- (Board_point *)getBestPoint: (int* )board;
+- (Board_point *)getBestPoint: (intsptr _Nonnull )board;
 
 @end
 

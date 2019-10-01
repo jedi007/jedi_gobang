@@ -8,15 +8,16 @@
 
 #import "AIAction.h"
 
+typedef int* ptrs[];
 
 @implementation AIAction
 
-- (Board_point *)getBestPoint: (int* )board
+- (Board_point *)getBestPoint: ( intsptr )board
 {
     Board_point* bestP = [[Board_point alloc] init];
     
     
-    NSLog(@"board[x]: %d",board[3]);
+    NSLog(@"board[x]: %d",board[3][3]);
     
     
     

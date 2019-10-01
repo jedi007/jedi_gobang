@@ -9,6 +9,8 @@
 #import "gobang_board.h"
 
 #import "modules/NSString+Reverse.h"
+#import "AIAction.h"
+
 
 #define add_index_scoretree         if(i<0 || i>(kBoardSize-1) || j<0 || j>(kBoardSize-1) )\
                                     {\
@@ -323,5 +325,15 @@ int current_color;
         else
             break;
     }
+}
+
+#pragma mark - AI
+- (Board_point*)getBestPoint
+{
+    AIAction* AI = [[AIAction alloc] init];
+    
+    
+    
+    return [AI getBestPoint:boardarray];
 }
 @end

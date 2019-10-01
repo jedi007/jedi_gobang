@@ -25,7 +25,6 @@
 @property (nonatomic, readwrite) CGPoint lastcenter;
 @property (nonatomic, readwrite) double lastscale;
 
-@property (nonatomic, readwrite) gobang_board* gboard;
 @property (nonatomic, readwrite) boardRecord* bRecord;
 
 @end

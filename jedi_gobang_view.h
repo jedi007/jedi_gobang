@@ -20,6 +20,10 @@ IB_DESIGNABLE
 - (void)setFrameForReSet:(CGRect)frame;
 - (void)preStep;
 
+- (void)add_chess:(Board_point *)bpoint;
+
+@property (nonatomic, readwrite) gobang_board* gboard;
+
 @end
 
 NS_ASSUME_NONNULL_END

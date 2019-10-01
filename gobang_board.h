@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "scoretree.h"
 
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface Board_point : NSObject
@@ -32,6 +33,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (int) get_chess_color:(int)x y:(int)y;
 - (int) isOver:(Board_point*)point;
 - (void) getWinPath:(Board_point*)point;
+- (Board_point*)getBestPoint;
 
 @end
 
