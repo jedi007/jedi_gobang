@@ -14,10 +14,20 @@ typedef int intsptr[15][15];
 
 NS_ASSUME_NONNULL_BEGIN
 
+@interface bestScorePoint: NSObject
+
+@property (nonatomic, readwrite) int i;
+@property (nonatomic, readwrite) int j;
+@property (nonatomic, readwrite) int score;
+
+@end
+
 @interface AIAction : NSObject
 
-- (Board_point *)getBestPoint: (intsptr _Nonnull )board;
+- (Board_point *)getBestPoint: (intsptr _Nonnull )board current_color:(int)c_color;
 
+
+@property (nonatomic, readwrite) int current_color;
 @end
 
 NS_ASSUME_NONNULL_END

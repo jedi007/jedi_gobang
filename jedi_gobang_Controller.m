@@ -145,5 +145,6 @@ jedi_gobang_view *gobangview;
     NSLog(@"jedi_gobang_controller receive AIAction");
     
     [gobangview.gboard getBestPoint];
+    [gobangview add_chess:[gobangview.gboard getBestPoint] ];
 }
 @end

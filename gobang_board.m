@@ -334,6 +334,6 @@ int current_color;
     
     
     
-    return [AI getBestPoint:boardarray];
+    return [AI getBestPoint:boardarray current_color:current_color];
 }
 @end
