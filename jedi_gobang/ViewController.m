@@ -59,9 +59,14 @@ double gH;
 
 - (void)PreStepClicked
 {
-     NSLog(@"PreStepClicked receive in main viewController");
+    NSLog(@"PreStepClicked receive in main viewController");
     [gobang_controller PreStep];
-    
+}
+
+- (void)AIActionClicked
+{
+    NSLog(@"AIActionClicked receive in main viewController");
+    [gobang_controller AIAction];
 }
 
 //设备方向改变的处理

@@ -39,7 +39,6 @@ NSTimer* timer;//用于区分棋盘点单击和双击
     _lastfram = _ofram = self.frame = frame;
     [self initruntimeinfo];
     
-    _gboard = nil;
     _gboard = [[gobang_board alloc] init];
     
     _bRecord = [[boardRecord alloc] init];
@@ -271,14 +270,7 @@ NSTimer* timer;//用于区分棋盘点单击和双击
         
         int overkey = [self->_gboard isOver:bpoint];
         
-        if( [self->_gboard add_chess:bpoint] )
-        {
-            NSLog(@"addchess success in fundTap");
-            [self->_bRecord addChess:bpoint.index_row-1 col:bpoint.index_col-1];
-            self->_lastfram = self.frame = self->_ofram;
-            [self initruntimeinfo];
-            [self setNeedsDisplay];
-        }
+        [self add_chess:bpoint];
         
         NSLog(@"引发通知！！！ overkey:%d",overkey);
         if( overkey )
@@ -295,6 +287,18 @@ NSTimer* timer;//用于区分棋盘点单击和双击
         }
     }];
     [[NSRunLoop currentRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
+}
+
+- (void)add_chess:(Board_point *)bpoint
+{
+    if( [self->_gboard add_chess:bpoint] )
+    {
+        NSLog(@"addchess success in fundTap");
+        [self->_bRecord addChess:bpoint.index_row-1 col:bpoint.index_col-1];
+        self->_lastfram = self.frame = self->_ofram;
+        [self initruntimeinfo];
+        [self setNeedsDisplay];
+    }
 }
 
 - (void)foundDoubleTap:(UITapGestureRecognizer *)recognizer

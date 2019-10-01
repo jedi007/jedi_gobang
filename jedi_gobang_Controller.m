@@ -139,4 +139,9 @@ jedi_gobang_view *gobangview;
     NSLog(@"jedi_gobang_controller receive preStep");
     [gobangview preStep];
 }
+
+- (void)AIAction
+{
+    NSLog(@"jedi_gobang_controller receive AIAction");
+}
 @end
