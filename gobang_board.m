@@ -144,7 +144,6 @@ int current_color;
     {
         add_index_scoretree
     }
-    NSLog(@"L_R_index_scoretree: %d",index_scoretree);
     return scoretree[index_scoretree];
 }
 
@@ -159,7 +158,6 @@ int current_color;
     {
         add_index_scoretree
     }
-    NSLog(@"U_D_index_scoretree: %d",index_scoretree);
     return scoretree[index_scoretree];
 }
 
@@ -174,7 +172,6 @@ int current_color;
     {
         add_index_scoretree
     }
-    NSLog(@"LT_RD_index_scoretree: %d",index_scoretree);
     return scoretree[index_scoretree];
 }
 
@@ -189,7 +186,6 @@ int current_color;
     {
         add_index_scoretree
     }
-    NSLog(@"RT_LD_index_scoretree: %d",index_scoretree);
     return scoretree[index_scoretree];
 }
 

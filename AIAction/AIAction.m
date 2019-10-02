@@ -31,6 +31,18 @@
     }
     return self;
 }
+
+- (id) initWith_i:(int)i j:(int)j score:(int)score
+{
+    if (self = [super init])
+    {
+        _i = i;
+        _j = j;
+        _score = score;
+    }
+    return self;
+}
+
 - (void) dealloc
 {
     NSLog(@"bestScorePoint dealloc is called");
@@ -43,6 +55,8 @@
     
 }
 
+@property (nonatomic, readwrite) NSMutableArray* bestsSP;
+
 @end
 
 @implementation AIAction
@@ -54,24 +68,32 @@
     NSLog(@"c_color: %d",c_color);
     //[self showtBoard];
     
-    bestScorePoint* bestSP = [[bestScorePoint alloc] init];
+    _bestsSP = [[NSMutableArray alloc] init];
+    
+    
     int cScore;
     for (int i=0; i<kBoardSize; i++) {
         for (int j=0; j<kBoardSize; j++) {
             if( tBoard[i][j] == 0 )
             {
                 cScore = [self getScore:i j:j];
-                NSLog(@"get the score is : %d",cScore);
-                if ( cScore > bestSP.score) {
-                    bestSP.score = cScore;
-                    bestSP.i = i;
-                    bestSP.j = j;
+                if ( cScore > 0) {
+                    [_bestsSP addObject:[[bestScorePoint alloc] initWith_i:i j:j score:cScore] ];
                 }
             }
         }
     }
     
-    NSLog(@"\n\n\n========================================== alg enemyBestSP");
+    NSArray *sortedArray = [_bestsSP sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+                            bestScorePoint *p1 = (bestScorePoint *)obj1;
+                            bestScorePoint *p2 = (bestScorePoint *)obj2;
+                            // 因为不满足sortedArrayUsingComparator方法的默认排序顺序，则需要交换
+                            if ( p1.score < p2.score ) return NSOrderedDescending;
+                            return NSOrderedAscending;
+                        }];
+    
+    
+    
     bestScorePoint* enemyBestSP = [[bestScorePoint alloc] init];
     _current_color *= -1;
     cScore = 0;
@@ -80,7 +102,6 @@
             if( tBoard[i][j] == 0 )
             {
                 cScore = [self getScore:i j:j];
-                NSLog(@"get the score is : %d",cScore);
                 if ( cScore > enemyBestSP.score) {
                     enemyBestSP.score = cScore;
                     enemyBestSP.i = i;
@@ -91,6 +112,8 @@
     }
     _current_color *= -1;//还原
     
+    
+    bestScorePoint *bestSP = [sortedArray objectAtIndex:0];
     bool return_bestSP = true;
     if (bestSP.score > 9999) {
         return_bestSP = true;
