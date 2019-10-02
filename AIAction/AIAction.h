@@ -24,7 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface AIAction : NSObject
 
-- (Board_point *)getBestPoint: (intsptr _Nonnull )board current_color:(int)c_color;
+- (bestScorePoint *)getBestPoint: (intsptr _Nonnull )board current_color:(int)c_color  deep:(int)deep width:(int)width;
 
 
 @property (nonatomic, readwrite) int current_color;

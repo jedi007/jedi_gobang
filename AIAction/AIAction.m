@@ -42,11 +42,6 @@
     }
     return self;
 }
-
-- (void) dealloc
-{
-    NSLog(@"bestScorePoint dealloc is called");
-}
 @end
 
 @interface AIAction()
@@ -61,11 +56,10 @@
 
 @implementation AIAction
 
-- (Board_point *)getBestPoint: ( intsptr )board current_color:(int)c_color
+- (bestScorePoint *)getBestPoint: ( intsptr )board current_color:(int)c_color deep:(int)deep width:(int)width
 {
-    [self boardCopy:board];
+    [self boardCopy:board tboard:tBoard];
     _current_color = c_color;
-    NSLog(@"c_color: %d",c_color);
     //[self showtBoard];
     
     _bestsSP = [[NSMutableArray alloc] init];
@@ -92,8 +86,31 @@
                             return NSOrderedAscending;
                         }];
     
+    int twidth = width;
+    if (sortedArray.count < width) {
+        twidth = sortedArray.count;
+    }
+    if (deep>0) {
+        NSString* dispatch_queue_name = [[NSString alloc] initWithFormat:@"com.jedigobang.concurrentDispatchQueue.%d",deep];
+        dispatch_queue_t myConcurrentDispatchQueue = dispatch_queue_create( [dispatch_queue_name UTF8String], DISPATCH_QUEUE_CONCURRENT);
+        dispatch_apply(twidth, myConcurrentDispatchQueue, ^(size_t index){
+            NSLog(@"index in myConcurrentDispatchQueue: %zu ,deep is %d",index,deep);
+            intsptr dispatch_tBoard;
+            [self boardCopy:board tboard:dispatch_tBoard];
+            bestScorePoint *tPoint = [sortedArray objectAtIndex:index];
+            dispatch_tBoard[tPoint.i][tPoint.j] = c_color;
+            
+            AIAction* action = [[AIAction alloc] init];
+            [action getBestPoint:dispatch_tBoard current_color:c_color*-1 deep:deep-1 width:width];
+        });
+    }
+    
+    NSLog(@"dispatch_apply all over in deep: %d",deep);
     
     
+    
+    
+    //old==============
     bestScorePoint* enemyBestSP = [[bestScorePoint alloc] init];
     _current_color *= -1;
     cScore = 0;
@@ -127,9 +144,9 @@
     
     
     if (return_bestSP) {
-        return [[Board_point alloc] initWhithi:bestSP.i j:bestSP.j];
+        return bestSP;
     }
-    return [[Board_point alloc] initWhithi:enemyBestSP.i j:enemyBestSP.j];
+    return enemyBestSP;
 }
 
 -(void)showtBoard
@@ -209,12 +226,12 @@
     return scoretree[index_scoretree];
 }
 
-- (void)boardCopy:(intsptr)board
+- (void)boardCopy:(intsptr)board tboard:(intsptr)tboard
 {
     for(int i=0;i<kBoardSize;i++)
     {
         for (int j=0; j<kBoardSize; j++) {
-            tBoard[i][j] = board[i][j];
+            tboard[i][j] = board[i][j];
         }
     }
 }

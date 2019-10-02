@@ -412,6 +412,7 @@ NSTimer* timer;//用于区分棋盘点单击和双击
         return [pointsArray objectAtIndex:pointIndex];
     }
     
+    
     return [_gboard getBestPoint];
 }
 @end

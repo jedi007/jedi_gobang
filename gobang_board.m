@@ -329,7 +329,7 @@ int current_color;
 {
     AIAction* AI = [[AIAction alloc] init];
     
-    
-    return [AI getBestPoint:boardarray current_color:current_color];
+    bestScorePoint* AIbestPoint = [AI getBestPoint:boardarray current_color:current_color deep:4 width:4];
+    return [[Board_point alloc] initWhithi:AIbestPoint.i j:AIbestPoint.j];
 }
 @end
