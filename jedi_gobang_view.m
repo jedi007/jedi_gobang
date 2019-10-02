@@ -409,7 +409,7 @@ NSTimer* timer;//用于区分棋盘点单击和双击
         NSArray* pointsArray = [[NSArray alloc] initWithObjects:p1,p2,p3,p4,p5,p6,p7,p8, nil];
         NSLog(@"pointsArray.count: %ld",pointsArray.count);
         
-        int pointIndex = arc4random() % 9;
+        int pointIndex = arc4random() % 8;
         return [pointsArray objectAtIndex:pointIndex];
     }
     
