@@ -19,6 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, readwrite) NSMutableArray *boardArray;
 @property (nonatomic, readwrite) Board_point* lastPoint;
+@property (nonatomic, readwrite) NSInteger lastStepIndex;
 
 @end
 

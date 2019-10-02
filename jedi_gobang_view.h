@@ -21,6 +21,7 @@ IB_DESIGNABLE
 - (void)preStep;
 
 - (void)add_chess:(Board_point *)bpoint;
+- (Board_point *)getBestPoint;
 
 @property (nonatomic, readwrite) gobang_board* gboard;
 

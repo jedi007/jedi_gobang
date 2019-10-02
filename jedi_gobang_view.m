@@ -392,4 +392,27 @@ NSTimer* timer;//用于区分棋盘点单击和双击
     [self setNeedsDisplay];
 }
 
+- (Board_point *)getBestPoint
+{
+    if ( _bRecord.lastStepIndex <= 0 ) {
+        return [[Board_point alloc] initWhithi:7 j:7];
+    } else if( _bRecord.lastStepIndex == 1 ) {
+        Board_point* p1 = [[Board_point alloc] initWhithi:6 j:6];
+        Board_point* p2 = [[Board_point alloc] initWhithi:6 j:7];
+        Board_point* p3 = [[Board_point alloc] initWhithi:6 j:8];
+        Board_point* p4 = [[Board_point alloc] initWhithi:7 j:6];
+        Board_point* p5 = [[Board_point alloc] initWhithi:7 j:8];
+        Board_point* p6 = [[Board_point alloc] initWhithi:8 j:6];
+        Board_point* p7 = [[Board_point alloc] initWhithi:8 j:7];
+        Board_point* p8 = [[Board_point alloc] initWhithi:8 j:8];
+        
+        NSArray* pointsArray = [[NSArray alloc] initWithObjects:p1,p2,p3,p4,p5,p6,p7,p8, nil];
+        NSLog(@"pointsArray.count: %ld",pointsArray.count);
+        
+        int pointIndex = arc4random() % 9;
+        return [pointsArray objectAtIndex:pointIndex];
+    }
+    
+    return [_gboard getBestPoint];
+}
 @end

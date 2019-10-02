@@ -12,15 +12,13 @@
 
 @synthesize lastPoint = _lastPoint;
 
-NSInteger lastStepIndex;
-
 - (instancetype)init
 {
     self = [super init];
     if (self) {
         _boardArray = [[NSMutableArray alloc]initWithCapacity:kBoardSize];
         _lastPoint = [[Board_point alloc] init];
-        lastStepIndex = 0;
+        _lastStepIndex = 0;
         for (int i=0; i<kBoardSize; ++i) {
             NSMutableArray* rowArray = [[NSMutableArray alloc]initWithCapacity:kBoardSize];
             for (int j=0; j<kBoardSize; ++j) {
@@ -35,22 +33,22 @@ NSInteger lastStepIndex;
 
 - (void)addChess:(NSInteger)row col:(NSInteger)col
 {
-    lastStepIndex++;
-    NSLog(@"boardRecord's addChess is called，lastStepIndex is : %ld ",lastStepIndex);
-    [[_boardArray objectAtIndex:row] replaceObjectAtIndex:col withObject:[NSNumber numberWithInteger:lastStepIndex]];
+    _lastStepIndex++;
+    NSLog(@"boardRecord's addChess is called，lastStepIndex is : %ld ",_lastStepIndex);
+    [[_boardArray objectAtIndex:row] replaceObjectAtIndex:col withObject:[NSNumber numberWithInteger:_lastStepIndex]];
 }
 
 - (void)preStep
 {
-    if(lastStepIndex>0)
+    if(_lastStepIndex>0)
     {
         for (int i=0; i<kBoardSize; ++i) {
             for (int j=0; j<kBoardSize; ++j) {
-                if( [[[_boardArray objectAtIndex:i] objectAtIndex:j] integerValue] == lastStepIndex)
+                if( [[[_boardArray objectAtIndex:i] objectAtIndex:j] integerValue] == _lastStepIndex)
                 {
                     [[_boardArray objectAtIndex:i] replaceObjectAtIndex:j withObject:[NSNumber numberWithInteger:0]];
-                    lastStepIndex--;
-                    NSLog(@"boardRecord's preStep is called，lastStepIndex is : %ld ",lastStepIndex);
+                    _lastStepIndex--;
+                    NSLog(@"boardRecord's preStep is called，lastStepIndex is : %ld ",_lastStepIndex);
                     return;
                 }
             }
@@ -61,11 +59,11 @@ NSInteger lastStepIndex;
 - (Board_point*)lastPoint
 {
     NSLog(@"getlastPoint is called");
-    if(lastStepIndex>0)
+    if(_lastStepIndex>0)
     {
         for (int i=0; i<kBoardSize; ++i) {
             for (int j=0; j<kBoardSize; ++j) {
-                if( [[[_boardArray objectAtIndex:i] objectAtIndex:j] integerValue] == lastStepIndex)
+                if( [[[_boardArray objectAtIndex:i] objectAtIndex:j] integerValue] == _lastStepIndex)
                 {
                     _lastPoint.index_row = i+1;
                     _lastPoint.index_col = j+1;
