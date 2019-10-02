@@ -52,10 +52,7 @@
     [self boardCopy:board];
     _current_color = c_color;
     NSLog(@"c_color: %d",c_color);
-    [self showtBoard];
-    
- 
-    
+    //[self showtBoard];
     
     bestScorePoint* bestSP = [[bestScorePoint alloc] init];
     int cScore;
@@ -74,11 +71,42 @@
         }
     }
     
+    NSLog(@"\n\n\n========================================== alg enemyBestSP");
+    bestScorePoint* enemyBestSP = [[bestScorePoint alloc] init];
+    _current_color *= -1;
+    cScore = 0;
+    for (int i=0; i<kBoardSize; i++) {
+        for (int j=0; j<kBoardSize; j++) {
+            if( tBoard[i][j] == 0 )
+            {
+                cScore = [self getScore:i j:j];
+                NSLog(@"get the score is : %d",cScore);
+                if ( cScore > enemyBestSP.score) {
+                    enemyBestSP.score = cScore;
+                    enemyBestSP.i = i;
+                    enemyBestSP.j = j;
+                }
+            }
+        }
+    }
+    _current_color *= -1;//还原
+    
+    bool return_bestSP = true;
+    if (bestSP.score > 9999) {
+        return_bestSP = true;
+    } else if (enemyBestSP.score > 9999){
+        return_bestSP = false;
+    } else if (bestSP.score > 2999){
+        return_bestSP = true;
+    } else if (enemyBestSP.score > 2999){
+        return_bestSP = false;
+    }
     
     
-    
-    
-    return [[Board_point alloc] initWhithi:bestSP.i j:bestSP.j];
+    if (return_bestSP) {
+        return [[Board_point alloc] initWhithi:bestSP.i j:bestSP.j];
+    }
+    return [[Board_point alloc] initWhithi:enemyBestSP.i j:enemyBestSP.j];
 }
 
 -(void)showtBoard
@@ -109,7 +137,7 @@
     {
         add_index_scoretree
     }
-    NSLog(@"L_R_index_scoretree: %d",index_scoretree);
+    //NSLog(@"L_R_index_scoretree: %d",index_scoretree);
     return scoretree[index_scoretree];
 }
 
@@ -124,7 +152,7 @@
     {
         add_index_scoretree
     }
-    NSLog(@"U_D_index_scoretree: %d",index_scoretree);
+    //NSLog(@"U_D_index_scoretree: %d",index_scoretree);
     return scoretree[index_scoretree];
 }
 
@@ -139,7 +167,7 @@
     {
         add_index_scoretree
     }
-    NSLog(@"LT_RD_index_scoretree: %d",index_scoretree);
+    //NSLog(@"LT_RD_index_scoretree: %d",index_scoretree);
     return scoretree[index_scoretree];
 }
 
@@ -154,7 +182,7 @@
     {
         add_index_scoretree
     }
-    NSLog(@"RT_LD_index_scoretree: %d",index_scoretree);
+    //NSLog(@"RT_LD_index_scoretree: %d",index_scoretree);
     return scoretree[index_scoretree];
 }
 

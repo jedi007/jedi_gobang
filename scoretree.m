@@ -18,7 +18,7 @@ short get_score_base(NSString *str)
     }
     else if( [str rangeOfString:@"011110"].location != NSNotFound )//活4
     {
-        return 2000;
+        return 3000;
     }
     else if( [str rangeOfString:@"011100"].location != NSNotFound )//活3
     {
