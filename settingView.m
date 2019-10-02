@@ -26,7 +26,7 @@
     if(self)
     {
         NSLog(@"init is called");
-        [self setBackgroundColor:[UIColor hexStringToColor:@"FFB6C1"]];
+        //[self setBackgroundColor:[UIColor hexStringToColor:@"FFB6C1"]];
         
         UIButton *btnAgain = [UIButton buttonWithType:UIButtonTypeCustom];
         btnAgain.frame = CGRectMake(10, 10, 100, 50);

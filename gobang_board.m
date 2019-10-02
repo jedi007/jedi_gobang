@@ -88,7 +88,7 @@ int current_color;
     {
         boardarray[point.index_row-1][point.index_col-1] = current_color;
         [self isOver:point];
-        current_color = -1*current_color;
+        current_color *= -1;
         return true;
     }
     return false;
@@ -99,6 +99,7 @@ int current_color;
     if(![point isNULL])
     {
         boardarray[point.index_row-1][point.index_col-1] = 0;
+        current_color *= -1;
     }
 }
 

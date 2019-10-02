@@ -35,14 +35,13 @@ NSInteger lastStepIndex;
 
 - (void)addChess:(NSInteger)row col:(NSInteger)col
 {
-    NSLog(@"boardRecord's addChess is called");
     lastStepIndex++;
+    NSLog(@"boardRecord's addChess is called，lastStepIndex is : %ld ",lastStepIndex);
     [[_boardArray objectAtIndex:row] replaceObjectAtIndex:col withObject:[NSNumber numberWithInteger:lastStepIndex]];
 }
 
 - (void)preStep
 {
-    
     if(lastStepIndex>0)
     {
         for (int i=0; i<kBoardSize; ++i) {
@@ -51,6 +50,7 @@ NSInteger lastStepIndex;
                 {
                     [[_boardArray objectAtIndex:i] replaceObjectAtIndex:j withObject:[NSNumber numberWithInteger:0]];
                     lastStepIndex--;
+                    NSLog(@"boardRecord's preStep is called，lastStepIndex is : %ld ",lastStepIndex);
                     return;
                 }
             }
