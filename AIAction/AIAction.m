@@ -51,6 +51,9 @@
 {
     [self boardCopy:board];
     _current_color = c_color;
+    NSLog(@"c_color: %d",c_color);
+    [self showtBoard];
+    
  
     
     
@@ -58,9 +61,10 @@
     int cScore;
     for (int i=0; i<kBoardSize; i++) {
         for (int j=0; j<kBoardSize; j++) {
-            if( board[i][j] == 0 )
+            if( tBoard[i][j] == 0 )
             {
                 cScore = [self getScore:i j:j];
+                NSLog(@"get the score is : %d",cScore);
                 if ( cScore > bestSP.score) {
                     bestSP.score = cScore;
                     bestSP.i = i;
@@ -77,11 +81,18 @@
     return [[Board_point alloc] initWhithi:bestSP.i j:bestSP.j];
 }
 
-
+-(void)showtBoard
+{
+    for (int i=0; i<kBoardSize; i++) {
+        for (int j=0; j<kBoardSize; j++) {
+            NSLog(@"tBoard[%d][%d]: %d",i,j,tBoard[i][j]);
+        }
+    }
+}
 
 - (int)getScore:(int)i j:(int)j
 {
-    return 0;
+    return [self get_L_R_score:i j:j] + [self get_U_D_score:i j:j] + [self get_LT_RD_score:i j:j] + [self get_RT_LD_score:i j:j];
 }
 
 - (short) get_L_R_score:(int)it j:(int)jt
@@ -99,6 +110,51 @@
         add_index_scoretree
     }
     NSLog(@"L_R_index_scoretree: %d",index_scoretree);
+    return scoretree[index_scoretree];
+}
+
+- (short) get_U_D_score:(int)it j:(int)jt
+{
+    int index_scoretree = 0;
+    for(int i = it-1,j = jt, y = 4; y<8 ;--i,++y)
+    {
+        add_index_scoretree
+    }
+    for(int i = it+1,j = jt, y = 3; y>=0 ;++i,--y)
+    {
+        add_index_scoretree
+    }
+    NSLog(@"U_D_index_scoretree: %d",index_scoretree);
+    return scoretree[index_scoretree];
+}
+
+- (short) get_LT_RD_score:(int)it j:(int)jt
+{
+    int index_scoretree = 0;
+    for(int i = it-1,j = jt-1, y = 4; y<8 ;--i,--j,++y)
+    {
+        add_index_scoretree
+    }
+    for(int i = it+1,j = jt+1, y = 3; y>=0 ;++i,++j,--y)
+    {
+        add_index_scoretree
+    }
+    NSLog(@"LT_RD_index_scoretree: %d",index_scoretree);
+    return scoretree[index_scoretree];
+}
+
+- (short) get_RT_LD_score:(int)it j:(int)jt
+{
+    int index_scoretree = 0;
+    for(int i = it-1,j = jt+1, y = 4; y<8 ;--i,++j,++y)
+    {
+        add_index_scoretree
+    }
+    for(int i = it+1,j = jt-1, y = 3; y>=0;++i,--j,--y)
+    {
+        add_index_scoretree
+    }
+    NSLog(@"RT_LD_index_scoretree: %d",index_scoretree);
     return scoretree[index_scoretree];
 }
 
