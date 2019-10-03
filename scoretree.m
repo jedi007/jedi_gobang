@@ -80,7 +80,6 @@ short get_score(NSString *str)
 {
     short L = get_score_base(str);
     short R = get_score_base( [str stringByReversed] );
-    
     return L>R?L:R;
 }
 
@@ -107,8 +106,7 @@ void init_scoretree()
                                 {
                                     NSString *str = [[NSString alloc] initWithFormat:@"%d%d%d%d1%d%d%d%d", N1,N2,N3,N4,N5,N6,N7,N8];
                                     scoretree[i] = get_score(str);
-                                    NSLog(@"%@",str);
-                                    NSLog(@"scoretree[%d]: %d",i,scoretree[i]);
+                                    NSLog(@"%@ scoretree[%d]: %d",str,i,scoretree[i]);
                                     i++;
                                 }
                             }

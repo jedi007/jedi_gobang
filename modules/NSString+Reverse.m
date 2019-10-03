@@ -13,7 +13,7 @@
 - (NSString *)stringByReversed
 {
     NSMutableString *s = [NSMutableString string];
-    for (NSUInteger i=self.length-1; i>0; i--) {
+    for (int i=self.length-1; i>=0; i--) {
         [s appendString:[self substringWithRange:NSMakeRange(i, 1)]];
     }
     return s;

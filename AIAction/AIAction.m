@@ -55,16 +55,20 @@
 {
     if (deep>0) {
         NSArray* sortedArray = [self get_sortedScoreArray:board color:c_color width:width];
-        
-//        bestScorePoint* bestp1 = [sortedArray objectAtIndex:0];
-//        if ( bestp1.score > 9999) {
-//            if ( deep%2 == 1 ) {
-//                bestp1.score *= -1;
-//            }
-//            return bestp1;
-//        }
-        
         NSArray* enemy_sortedArray = [self get_sortedScoreArray:board color:c_color*-1 width:width];
+        
+        bestScorePoint* bestSP = [sortedArray objectAtIndex:0];
+        bestScorePoint* enemy_bestSP = [enemy_sortedArray objectAtIndex:0];
+        if (bestSP.score > 9999) {
+            return bestSP;
+        } else if (enemy_bestSP.score > 9999){
+            return enemy_bestSP;
+        } else if (bestSP.score > 2999){
+            return bestSP;
+        } else if (enemy_bestSP.score > 2999){
+            return enemy_bestSP;
+        }
+        
         
         NSMutableArray *total_sortedArray = [self get_total_sortedArray:sortedArray ayyay2:enemy_sortedArray];
         
@@ -113,19 +117,6 @@
         
         return [[bestScorePoint alloc] initWith_i:-1 j:-1 score:sortedArray_totalScore-enemy_sortedArray_totalScore];
     }
-    
-    
-//    bestScorePoint *bestSP = [sortedArray objectAtIndex:0];
-//    bool return_bestSP = true;
-//    if (bestSP.score > 9999) {
-//        return_bestSP = true;
-//    } else if (enemyBestSP.score > 9999){
-//        return_bestSP = false;
-//    } else if (bestSP.score > 2999){
-//        return_bestSP = true;
-//    } else if (enemyBestSP.score > 2999){
-//        return_bestSP = false;
-//    }
 }
 
 - (NSArray* )get_sortedScoreArray:( intsptr )board color:(int)color width:(int)width{
@@ -135,6 +126,7 @@
         for (int j=0; j<kBoardSize; j++) {
             if (i==6 && j==9) {
                 NSLog(@"board[6][9]: %d",board[i][j]);
+                NSLog(@"board[6][13]: %d",board[6][13]);
             }
             if( board[i][j] == 0 )
             {
@@ -226,11 +218,24 @@
     }
     for(int i = it,j = jt+1, y = 3; y>=0;++j,--y)//落子点左边4位：3^7 3^6 3^5 3^4  右边4位：3^3 3^2 3^1 3^0
     {
-        add_index_scoretree
+        if(i<0 || i>(kBoardSize-1) || j<0 || j>(kBoardSize-1) )
+        {
+            index_scoretree += 2*pow(3,y);
+            continue;
+        }
+        if (it==6 && jt==9) {
+            NSLog(@"======== board[%d][%d]: %d",i,j,board[i][j]);
+            
+        }
+        if( color == board[i][j] )
+            index_scoretree += pow(3,y);
+        else if( -1*color == board[i][j] )
+            index_scoretree += 2*pow(3,y);
     }
     //NSLog(@"L_R_index_scoretree: %d",index_scoretree);
     if (it==6 && jt==9) {
         NSLog(@"board[6][9]  index_scoretree: %d",index_scoretree);
+        
     }
     return scoretree[index_scoretree];
 }
