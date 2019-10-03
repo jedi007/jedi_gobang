@@ -124,16 +124,9 @@
     int cScore;
     for (int i=0; i<kBoardSize; i++) {
         for (int j=0; j<kBoardSize; j++) {
-            if (i==6 && j==9) {
-                NSLog(@"board[6][9]: %d",board[i][j]);
-                NSLog(@"board[6][13]: %d",board[6][13]);
-            }
             if( board[i][j] == 0 )
             {
                 cScore = [self getScore:board color:color i:i j:j];
-                if (i==6 && j==9) {
-                    NSLog(@"board[6][9]  cScore: %d",cScore);
-                }
                 if ( cScore > 0) {
                     [bestsSP addObject:[[bestScorePoint alloc] initWith_i:i j:j score:cScore] ];
                 }
@@ -203,40 +196,16 @@
     int index_scoretree = 0;
     for(int i = it,j = jt-1, y = 4; y<8 ;--j,++y)//落子点左边4位：3^7 3^6 3^5 3^4  右边4位：3^3 3^2 3^1 3^0
     {
-        if(i<0 || i>(kBoardSize-1) || j<0 || j>(kBoardSize-1) )
-        {
-            index_scoretree += 2*pow(3,y);
-            continue;
-        }
-        if( color == board[i][j] )
-            index_scoretree += pow(3,y);
-        else if( -1*color == board[i][j] )
-            index_scoretree += 2*pow(3,y);
+        add_index_scoretree
 //        else if( 0 == boardarray[i+1][j] )
 //            index_scoretree += 0;
 //+0 等于不加
     }
     for(int i = it,j = jt+1, y = 3; y>=0;++j,--y)//落子点左边4位：3^7 3^6 3^5 3^4  右边4位：3^3 3^2 3^1 3^0
     {
-        if(i<0 || i>(kBoardSize-1) || j<0 || j>(kBoardSize-1) )
-        {
-            index_scoretree += 2*pow(3,y);
-            continue;
-        }
-        if (it==6 && jt==9) {
-            NSLog(@"======== board[%d][%d]: %d",i,j,board[i][j]);
-            
-        }
-        if( color == board[i][j] )
-            index_scoretree += pow(3,y);
-        else if( -1*color == board[i][j] )
-            index_scoretree += 2*pow(3,y);
+        add_index_scoretree
     }
     //NSLog(@"L_R_index_scoretree: %d",index_scoretree);
-    if (it==6 && jt==9) {
-        NSLog(@"board[6][9]  index_scoretree: %d",index_scoretree);
-        
-    }
     return scoretree[index_scoretree];
 }
 
