@@ -14,9 +14,9 @@
                                         index_scoretree += 2*pow(3,y);\
                                         continue;\
                                     }\
-                                    if( _current_color == tBoard[i][j] )\
+                                    if( color == board[i][j] )\
                                         index_scoretree += pow(3,y);\
-                                    else if( -1*_current_color == tBoard[i][j] )\
+                                    else if( -1*color == board[i][j] )\
                                         index_scoretree += 2*pow(3,y);\
 
 
@@ -45,12 +45,7 @@
 @end
 
 @interface AIAction()
-{
-    intsptr tBoard;
-    
-}
 
-@property (nonatomic, readwrite) NSMutableArray* bestsSP;
 
 @end
 
@@ -58,117 +53,173 @@
 
 - (bestScorePoint *)getBestPoint: ( intsptr )board current_color:(int)c_color deep:(int)deep width:(int)width
 {
-    [self boardCopy:board tboard:tBoard];
-    _current_color = c_color;
-    //[self showtBoard];
-    
-    _bestsSP = [[NSMutableArray alloc] init];
-    
-    
-    int cScore;
-    for (int i=0; i<kBoardSize; i++) {
-        for (int j=0; j<kBoardSize; j++) {
-            if( tBoard[i][j] == 0 )
-            {
-                cScore = [self getScore:i j:j];
-                if ( cScore > 0) {
-                    [_bestsSP addObject:[[bestScorePoint alloc] initWith_i:i j:j score:cScore] ];
-                }
-            }
-        }
-    }
-    
-    NSArray *sortedArray = [_bestsSP sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
-                            bestScorePoint *p1 = (bestScorePoint *)obj1;
-                            bestScorePoint *p2 = (bestScorePoint *)obj2;
-                            // 因为不满足sortedArrayUsingComparator方法的默认排序顺序，则需要交换
-                            if ( p1.score < p2.score ) return NSOrderedDescending;
-                            return NSOrderedAscending;
-                        }];
-    
-    int twidth = width;
-    if (sortedArray.count < width) {
-        twidth = sortedArray.count;
-    }
     if (deep>0) {
-        NSString* dispatch_queue_name = [[NSString alloc] initWithFormat:@"com.jedigobang.concurrentDispatchQueue.%d",deep];
+        NSArray* sortedArray = [self get_sortedScoreArray:board color:c_color width:width];
+        
+//        bestScorePoint* bestp1 = [sortedArray objectAtIndex:0];
+//        if ( bestp1.score > 9999) {
+//            if ( deep%2 == 1 ) {
+//                bestp1.score *= -1;
+//            }
+//            return bestp1;
+//        }
+        
+        NSArray* enemy_sortedArray = [self get_sortedScoreArray:board color:c_color*-1 width:width];
+        
+        NSMutableArray *total_sortedArray = [self get_total_sortedArray:sortedArray ayyay2:enemy_sortedArray];
+        
+        if (deep ==4) {
+            [self showArray:total_sortedArray];
+        }
+        
+        
+        
+        NSInteger count =total_sortedArray.count;
+        int random = arc4random()%10000;
+        NSString* dispatch_queue_name = [[NSString alloc] initWithFormat:@"com.jedigobang.concurrentDispatchQueue.%d.%d",deep,random];
         dispatch_queue_t myConcurrentDispatchQueue = dispatch_queue_create( [dispatch_queue_name UTF8String], DISPATCH_QUEUE_CONCURRENT);
-        dispatch_apply(twidth, myConcurrentDispatchQueue, ^(size_t index){
-            NSLog(@"index in myConcurrentDispatchQueue: %zu ,deep is %d",index,deep);
+        dispatch_apply(count, myConcurrentDispatchQueue, ^(size_t index){
+            //NSLog(@"index in myConcurrentDispatchQueue: %zu ,deep is %d",index,deep);
             intsptr dispatch_tBoard;
             [self boardCopy:board tboard:dispatch_tBoard];
-            bestScorePoint *tPoint = [sortedArray objectAtIndex:index];
+            bestScorePoint *tPoint = [total_sortedArray objectAtIndex:index];
             dispatch_tBoard[tPoint.i][tPoint.j] = c_color;
             
             AIAction* action = [[AIAction alloc] init];
-            [action getBestPoint:dispatch_tBoard current_color:c_color*-1 deep:deep-1 width:width];
+            bestScorePoint *dispatch_best_point = [action getBestPoint:dispatch_tBoard current_color:c_color*-1 deep:deep-1 width:width];
+            ((bestScorePoint *)[total_sortedArray objectAtIndex:index]).score = - dispatch_best_point.score;
         });
+        
+        NSArray* resultArray = [self sortArray:total_sortedArray];
+        
+        bestScorePoint* bp = [resultArray objectAtIndex:0];
+        NSLog(@"return bp is i:%d  j:%d  score:%d",bp.i,bp.j,bp.score);
+        
+        return [resultArray objectAtIndex:0];
+    } else {
+        NSArray* sortedArray = [self get_sortedScoreArray:board color:c_color width:10];
+        
+        NSArray* enemy_sortedArray = [self get_sortedScoreArray:board color:c_color*-1 width:10];
+        
+        int sortedArray_totalScore = 0;
+        for (int  i =0; i<sortedArray.count; i++) {
+            sortedArray_totalScore += ( (bestScorePoint *)[sortedArray objectAtIndex:i]).score;
+        }
+        
+        int enemy_sortedArray_totalScore = 0;
+        for (int  i =0; i<sortedArray.count; i++) {
+            enemy_sortedArray_totalScore += ( (bestScorePoint *)[enemy_sortedArray objectAtIndex:i]).score;
+        }
+        
+        return [[bestScorePoint alloc] initWith_i:-1 j:-1 score:sortedArray_totalScore-enemy_sortedArray_totalScore];
     }
     
-    NSLog(@"dispatch_apply all over in deep: %d",deep);
     
-    
-    
-    
-    //old==============
-    bestScorePoint* enemyBestSP = [[bestScorePoint alloc] init];
-    _current_color *= -1;
-    cScore = 0;
+//    bestScorePoint *bestSP = [sortedArray objectAtIndex:0];
+//    bool return_bestSP = true;
+//    if (bestSP.score > 9999) {
+//        return_bestSP = true;
+//    } else if (enemyBestSP.score > 9999){
+//        return_bestSP = false;
+//    } else if (bestSP.score > 2999){
+//        return_bestSP = true;
+//    } else if (enemyBestSP.score > 2999){
+//        return_bestSP = false;
+//    }
+}
+
+- (NSArray* )get_sortedScoreArray:( intsptr )board color:(int)color width:(int)width{
+    NSMutableArray* bestsSP = [[NSMutableArray alloc] init];
+    int cScore;
     for (int i=0; i<kBoardSize; i++) {
         for (int j=0; j<kBoardSize; j++) {
-            if( tBoard[i][j] == 0 )
+            if (i==6 && j==9) {
+                NSLog(@"board[6][9]: %d",board[i][j]);
+            }
+            if( board[i][j] == 0 )
             {
-                cScore = [self getScore:i j:j];
-                if ( cScore > enemyBestSP.score) {
-                    enemyBestSP.score = cScore;
-                    enemyBestSP.i = i;
-                    enemyBestSP.j = j;
+                cScore = [self getScore:board color:color i:i j:j];
+                if (i==6 && j==9) {
+                    NSLog(@"board[6][9]  cScore: %d",cScore);
+                }
+                if ( cScore > 0) {
+                    [bestsSP addObject:[[bestScorePoint alloc] initWith_i:i j:j score:cScore] ];
                 }
             }
         }
     }
-    _current_color *= -1;//还原
-    
-    
-    bestScorePoint *bestSP = [sortedArray objectAtIndex:0];
-    bool return_bestSP = true;
-    if (bestSP.score > 9999) {
-        return_bestSP = true;
-    } else if (enemyBestSP.score > 9999){
-        return_bestSP = false;
-    } else if (bestSP.score > 2999){
-        return_bestSP = true;
-    } else if (enemyBestSP.score > 2999){
-        return_bestSP = false;
+    NSInteger twidth = width;
+    NSArray *tArray = [self sortArray:bestsSP];
+    if (tArray.count > width) {
+        tArray = [tArray subarrayWithRange:NSMakeRange(0, twidth)];
     }
     
-    
-    if (return_bestSP) {
-        return bestSP;
-    }
-    return enemyBestSP;
+    return tArray;
 }
 
--(void)showtBoard
+- (NSMutableArray*)get_total_sortedArray:(NSArray*)array1 ayyay2:(NSArray*)array2
 {
-    for (int i=0; i<kBoardSize; i++) {
-        for (int j=0; j<kBoardSize; j++) {
-            NSLog(@"tBoard[%d][%d]: %d",i,j,tBoard[i][j]);
+    NSMutableArray* total_sortedArray = [[NSMutableArray alloc] initWithArray:array1];
+    
+    for (int i = 0; i<array2.count; i++) {
+        bestScorePoint *p2 = [array2 objectAtIndex:i];
+        bool shouldAdd = true;
+        for (int j = 0;j<array1.count; j++) {
+            bestScorePoint *p1 = [array1 objectAtIndex:j];
+            if ( p1.i == p2.i && p1.j == p2.j) {
+                shouldAdd = false;
+                break;
+            }
+        }
+        if ( shouldAdd ) {
+            p2.score *= 0.9;
+            [total_sortedArray addObject:p2];
         }
     }
+    
+    return total_sortedArray;
 }
 
-- (int)getScore:(int)i j:(int)j
+- (NSArray* )sortArray:(NSArray* )array
 {
-    return [self get_L_R_score:i j:j] + [self get_U_D_score:i j:j] + [self get_LT_RD_score:i j:j] + [self get_RT_LD_score:i j:j];
+    return [array sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+        bestScorePoint *p1 = (bestScorePoint *)obj1;
+        bestScorePoint *p2 = (bestScorePoint *)obj2;
+        // 因为不满足sortedArrayUsingComparator方法的默认排序顺序，则需要交换
+        if ( p1.score < p2.score ) return NSOrderedDescending;
+        return NSOrderedAscending;
+    }];
 }
 
-- (short) get_L_R_score:(int)it j:(int)jt
+- (void)showArray:( NSArray* )array
+{
+    NSLog(@"begin show array");
+    for (int i = 0; i<array.count; i++) {
+        bestScorePoint* p = [array objectAtIndex:i];
+        NSLog(@"array[%d]: i:%d j%d score:%d",i,p.i,p.j,p.score);
+    }
+    NSLog(@"end show array");
+}
+
+- (int)getScore:( intsptr )board color:(int)c_color i:(int)i j:(int)j
+{
+    return [self get_L_R_score:board color:c_color i:i j:j] + [self get_U_D_score:board color:c_color i:i j:j] + [self get_LT_RD_score:board color:c_color i:i j:j] + [self get_RT_LD_score:board color:c_color i:i j:j];
+}
+
+- (short) get_L_R_score:( intsptr )board color:(int)color i:(int)it j:(int)jt
 {
     int index_scoretree = 0;
     for(int i = it,j = jt-1, y = 4; y<8 ;--j,++y)//落子点左边4位：3^7 3^6 3^5 3^4  右边4位：3^3 3^2 3^1 3^0
     {
-        add_index_scoretree
+        if(i<0 || i>(kBoardSize-1) || j<0 || j>(kBoardSize-1) )
+        {
+            index_scoretree += 2*pow(3,y);
+            continue;
+        }
+        if( color == board[i][j] )
+            index_scoretree += pow(3,y);
+        else if( -1*color == board[i][j] )
+            index_scoretree += 2*pow(3,y);
 //        else if( 0 == boardarray[i+1][j] )
 //            index_scoretree += 0;
 //+0 等于不加
@@ -178,10 +229,13 @@
         add_index_scoretree
     }
     //NSLog(@"L_R_index_scoretree: %d",index_scoretree);
+    if (it==6 && jt==9) {
+        NSLog(@"board[6][9]  index_scoretree: %d",index_scoretree);
+    }
     return scoretree[index_scoretree];
 }
 
-- (short) get_U_D_score:(int)it j:(int)jt
+- (short) get_U_D_score:( intsptr )board color:(int)color i:(int)it j:(int)jt
 {
     int index_scoretree = 0;
     for(int i = it-1,j = jt, y = 4; y<8 ;--i,++y)
@@ -196,7 +250,7 @@
     return scoretree[index_scoretree];
 }
 
-- (short) get_LT_RD_score:(int)it j:(int)jt
+- (short) get_LT_RD_score:( intsptr )board color:(int)color i:(int)it j:(int)jt
 {
     int index_scoretree = 0;
     for(int i = it-1,j = jt-1, y = 4; y<8 ;--i,--j,++y)
@@ -211,7 +265,7 @@
     return scoretree[index_scoretree];
 }
 
-- (short) get_RT_LD_score:(int)it j:(int)jt
+- (short) get_RT_LD_score:( intsptr )board color:(int)color i:(int)it j:(int)jt
 {
     int index_scoretree = 0;
     for(int i = it-1,j = jt+1, y = 4; y<8 ;--i,++j,++y)

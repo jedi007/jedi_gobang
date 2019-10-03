@@ -26,8 +26,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (bestScorePoint *)getBestPoint: (intsptr _Nonnull )board current_color:(int)c_color  deep:(int)deep width:(int)width;
 
-
-@property (nonatomic, readwrite) int current_color;
 @end
 
 NS_ASSUME_NONNULL_END
